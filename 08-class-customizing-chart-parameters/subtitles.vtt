@@ -1,0 +1,149 @@
+WEBVTT
+
+1
+00:00:00.320 --> 00:00:05.360
+Let us now look at how to customize chart parameters while installing a chart.
+
+2
+00:00:06.480 --> 00:00:11.680
+When we installed WordPress, we installed everything with its default values.
+
+3
+00:00:12.800 --> 00:00:18.160
+But we may not want to do that at all times. For example, the blog has a default name
+
+4
+00:00:18.160 --> 00:00:24.879
+called users blog, we may not want our WordPress site to have this name. So how did it get this
+
+5
+00:00:24.879 --> 00:00:32.160
+name in the first place. The WordPress application deployed by the deployment or YAML file has a
+
+6
+00:00:32.160 --> 00:00:38.720
+WordPress blog name value set as an environment variable. And it picks the value from the values
+
+7
+00:00:38.720 --> 00:00:45.840
+.yaml file, which has it set to users blog. So that's where the value is being picked from.
+
+8
+00:00:47.360 --> 00:00:52.880
+Now when we install the WordPress application with a Helm chart, we did it with a single
+
+9
+00:00:52.880 --> 00:00:59.279
+helm install command. This command pulls the chart and deploys the application instantly.
+
+10
+00:00:59.919 --> 00:01:04.800
+So there is no window for us to modify the value in values.yaml file.
+
+11
+00:01:06.000 --> 00:01:12.160
+One way we could modify some of the default values is by passing in a command line parameter
+
+12
+00:01:12.160 --> 00:01:20.160
+along with the helm install command using the set option. With the set option, you can pass in
+
+13
+00:01:20.160 --> 00:01:25.919
+any field from the values.yaml file and set a value for it in the command line. This can be
+
+14
+00:01:25.919 --> 00:01:32.400
+used multiple times to pass multiple parameters to the command line to customize the deployment.
+
+15
+00:01:32.400 --> 00:01:39.680
+So here we customize the WordPress blog name property to helm tutorials, and the user email
+
+16
+00:01:39.680 --> 00:01:46.160
+to john@example.com. And these override the values set in the values.yaml file.
+
+17
+00:01:47.120 --> 00:01:53.360
+If there are too many of these values, then another option is to move these to our own custom
+
+18
+00:01:53.360 --> 00:01:59.120
+values.yaml file. So here we create a file named custom values.yaml. And we then move
+
+19
+00:01:59.120 --> 00:02:06.879
+the variables inside this. Since this is a YAML file, we replace the equal sign with the colon.
+
+20
+00:02:07.599 --> 00:02:14.479
+And we then pass in this file using the values option like this. So --values, custom
+
+21
+00:02:14.960 --> 00:02:21.759
+values.yaml. So this is going to now pick the values from this custom values file,
+
+22
+00:02:21.759 --> 00:02:26.000
+and then override the values in the default values.yaml file.
+
+23
+00:02:27.679 --> 00:02:33.199
+Finally, what if we really want to modify the built-in values.yaml file itself,
+
+24
+00:02:33.839 --> 00:02:38.960
+instead of using the command line option or the custom values file. So instead of running the
+
+25
+00:02:38.960 --> 00:02:44.960
+helm install command, we will break it up into two commands. First, we pull the chart using the
+
+26
+00:02:44.960 --> 00:02:51.600
+helm pull command. Now this will pull the chart in an archived form or compressed form. And then
+
+27
+00:02:51.600 --> 00:02:59.279
+you will have to unarchive or uncompress it. Or you could have helm uncompress it by running the
+
+28
+00:02:59.279 --> 00:03:06.880
+helm pull command with the --untar option in the command line. Now this creates a directory
+
+29
+00:03:06.880 --> 00:03:13.199
+named WordPress. Under this, you will see all the files that are part of the chart. And there
+
+30
+00:03:13.199 --> 00:03:20.399
+is the values.yaml file, we can then open and edit this file in any text editor. And then once
+
+31
+00:03:20.399 --> 00:03:26.160
+we are ready, we run the helm install command. But instead of specifying the WordPress chart name,
+
+32
+00:03:26.160 --> 00:03:33.039
+now we specify the path to the local WordPress directory. So the ./ here indicates
+
+33
+00:03:33.039 --> 00:03:38.240
+current directory, and it picks the chart from the WordPress directory, which is under the
+
+34
+00:03:38.240 --> 00:03:44.559
+current directory. So when you run the helm install command, you can specify the release name followed by
+
+35
+00:03:46.000 --> 00:03:55.520
+the chart name, which is on the chart repository. Or if you have a local chart on your local file
+
+36
+00:03:55.520 --> 00:04:02.320
+system, in a particular directory, you can specify the path to that directory as well. Well, that's
+
+37
+00:04:02.320 --> 00:04:05.119
+all for now. And I will see you in the next one.

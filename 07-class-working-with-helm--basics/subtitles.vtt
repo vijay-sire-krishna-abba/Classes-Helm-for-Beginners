@@ -1,0 +1,237 @@
+WEBVTT
+
+1
+00:00:00.880 --> 00:00:08.720
+With Helm installed, let's check out what we can do with it. All operations are run using the Helm
+
+2
+00:00:08.720 --> 00:00:14.560
+command line interface. To invoke the Helm command line interface, simply run the Helm command.
+
+3
+00:00:15.760 --> 00:00:22.320
+Simply running the helm command or running helm with the helm option will list helpful information.
+
+4
+00:00:23.200 --> 00:00:29.040
+This can serve as a quick way to remember what the right command is to do something. For example,
+
+5
+00:00:29.040 --> 00:00:34.720
+say we want to restore a release to a previous version. After a failed upgrade, we might wonder,
+
+6
+00:00:34.720 --> 00:00:40.560
+wait, what was the command to do that helm restore. And we then see in this list that
+
+7
+00:00:40.560 --> 00:00:47.360
+the correct command is actually helm rollback. So it's much faster than looking on the internet
+
+8
+00:00:47.360 --> 00:00:53.040
+for the answer since it's immediately accessible from the command line interface. We can also use
+
+9
+00:00:53.040 --> 00:00:59.680
+this help feature for subcommands. For example, if we want to see what repository related actions
+
+10
+00:00:59.680 --> 00:01:07.760
+we can take, the command helm repo help will show us how we can add chart repository, or list chart
+
+11
+00:01:07.760 --> 00:01:13.360
+repositories or remove repositories and so on. And we can even dig deeper and learn about what a sub
+
+12
+00:01:13.360 --> 00:01:20.879
+command does, and what parameters it supports. So now that we are familiar with the basics of
+
+13
+00:01:20.879 --> 00:01:26.320
+Helm CLI, let's see what we can do with it. So let's assume we are in a scenario where we need
+
+14
+00:01:26.320 --> 00:01:32.080
+to launch a WordPress website in Kubernetes. And we know that we need a chart to easily deploy the
+
+15
+00:01:32.080 --> 00:01:37.440
+WordPress application. So earlier, we learned that all the charts are stored in the online chart
+
+16
+00:01:37.440 --> 00:01:42.720
+repository at artifacthub.io. So we, we go to the website and search for the chart manually.
+
+17
+00:01:43.279 --> 00:01:48.480
+To ensure we get a high quality chart, we can try to find one that has the official
+
+18
+00:01:48.480 --> 00:01:57.120
+or verified publisher badge. So once the chart is selected, we'll see a detailed page with all
+
+19
+00:01:57.120 --> 00:02:02.239
+the info. And we may want to know about this chart. So it starts out with the exact commands
+
+20
+00:02:02.239 --> 00:02:07.440
+that we need to use to install the chart into our Kubernetes cluster, that continues with what
+
+21
+00:02:07.440 --> 00:02:12.880
+software components this uses and further down the page, we can even see some of the most important
+
+22
+00:02:12.880 --> 00:02:19.039
+configurable settings that we can tweak. It's up to chart developers to mention what they think is
+
+23
+00:02:19.039 --> 00:02:25.600
+important in this description page. Another way to search for a chart is from the command line
+
+24
+00:02:25.600 --> 00:02:32.800
+itself. Use the helm search command to search for WordPress. But note that the search command expects
+
+25
+00:02:32.800 --> 00:02:40.160
+an additional subcommand where you must specify where to search. So you must specify either hub
+
+26
+00:02:40.160 --> 00:02:47.279
+or repo. Hub refers to the artifact hub, which we just saw. We know that the hub is where
+
+27
+00:02:47.279 --> 00:02:53.600
+all the repositories are kind of listed. So this is going to list all charts listed at the
+
+28
+00:02:54.399 --> 00:03:00.399
+artifact hub.io. However, if you'd like to search in specific repositories, then you could use the
+
+29
+00:03:00.399 --> 00:03:07.279
+repo option. So here are the results that show a list of charts for deploying WordPress along
+
+30
+00:03:07.279 --> 00:03:12.399
+with the app version, which by now we know is a version of WordPress that these charts will
+
+31
+00:03:12.399 --> 00:03:20.639
+deploy. Once we have identified the chart to install, we can deploy the application in two
+
+32
+00:03:20.639 --> 00:03:27.199
+commands. As listed in the README file for that chart, there are two commands to be run.
+
+33
+00:03:27.199 --> 00:03:33.839
+The first is to add the Bitnami repository. So the Bitnami chart repository is available at charts.bitnami
+
+34
+00:03:33.839 --> 00:03:40.479
+dot com slash bitnami, it must be added as a repository to our local Helm setup so that
+
+35
+00:03:41.759 --> 00:03:46.080
+when we run the install command Helm can find where the chart is to be installed from
+
+36
+00:03:46.880 --> 00:03:53.039
+the Helm repo add command at the repository. Next, we deploy the application to our cluster using the
+
+37
+00:03:53.039 --> 00:04:01.919
+Helm chart by running the command Helm install my release Bitnami WordPress. So that's it.
+
+38
+00:04:01.919 --> 00:04:08.880
+It's super simple. Deploying an application on a Kubernetes cluster has never been easier. At the end, we even
+
+39
+00:04:08.880 --> 00:04:14.160
+get some useful information about how we can use this WordPress install. So this text is actually
+
+40
+00:04:14.160 --> 00:04:20.000
+generated by the instructions included in the chart. So this way, users can get an idea about
+
+41
+00:04:20.000 --> 00:04:26.880
+how they can continue with their newly installed Kubernetes package. Now once a chart is deployed,
+
+42
+00:04:26.880 --> 00:04:33.040
+it is deployed as a release. So to list all existing releases, run the Helm list command.
+
+43
+00:04:33.760 --> 00:04:39.040
+This is very useful not only to track what has been installed, but also to see what hasn't been
+
+44
+00:04:39.040 --> 00:04:46.160
+updated in a long time. Now when we want to remove all traces of this app, imagine doing that by hand,
+
+45
+00:04:46.160 --> 00:04:51.119
+we would have to delete a lot of objects from our cluster, one by one to get rid of all the
+
+46
+00:04:51.119 --> 00:04:55.440
+WordPress-related components. But with Helm this is again easily done with a simple
+
+47
+00:04:56.640 --> 00:05:02.880
+command. Since we now have the name of the release, we can remove all Kubernetes objects added by the
+
+48
+00:05:02.880 --> 00:05:09.279
+WordPress website with one simple command. Again, very easy, we can really begin to see the power
+
+49
+00:05:09.279 --> 00:05:16.000
+of Helm as a package manager for Kubernetes. Now let's look at some of the other commands available
+
+50
+00:05:16.000 --> 00:05:21.200
+while working with Helm repositories. So the Helm repo command can be used to add,
+
+51
+00:05:21.200 --> 00:05:26.480
+list, remove or update Helm repositories. So we already saw the Helm repo add command.
+
+52
+00:05:27.519 --> 00:05:33.440
+The helm repo list command lists existing repositories. The helm repo update command is
+
+53
+00:05:33.440 --> 00:05:40.399
+somewhat equivalent to what a sudo apt-get update command does on some Linux-based operating
+
+54
+00:05:40.399 --> 00:05:47.440
+systems. So in a nutshell, the info that helm has about that repository is stored locally. And with
+
+55
+00:05:47.440 --> 00:05:53.519
+time, repository maintainers make changes, update stuff and so on. So our local copy of this info
+
+56
+00:05:53.519 --> 00:05:59.679
+gets stale and outdated. So the command above refreshes the info that helm has by pulling it in
+
+57
+00:05:59.679 --> 00:06:07.119
+from the online repository to our local computer. This way, we get the latest data available. Well,
+
+58
+00:06:07.119 --> 00:06:11.760
+that's all for now, head over to the labs and get your hands dirty with some of the
+
+59
+00:06:11.760 --> 00:06:15.440
+basic helm command-line operations. And I'll see you in the next one.

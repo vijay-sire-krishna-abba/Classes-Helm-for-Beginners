@@ -1,0 +1,53 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:12.040
+Hello, and welcome. My name is Mumshad Mannambeth, and I will be your instructor. In this course,
+
+2
+00:00:12.040 --> 00:00:17.760
+we will learn about Helm and how it helps ease the deployment and lifecycle management of
+
+3
+00:00:17.760 --> 00:00:23.639
+applications deployed on a Kubernetes cluster. Throughout this course, we will learn the basics
+
+4
+00:00:23.639 --> 00:00:28.360
+of Helm, we will see how to install and get started with it, we will then learn about the
+
+5
+00:00:28.360 --> 00:00:34.119
+architecture and the various components part of Helm, such as charts, repos, releases and revisions,
+
+6
+00:00:34.119 --> 00:00:39.220
+we look at charts and how to develop our own charts from scratch. And we look at functions,
+
+7
+00:00:39.220 --> 00:00:46.000
+pipelines, conditionals, and with blocks, we look at ranges and hooks. And finally, we will look at
+
+8
+00:00:46.000 --> 00:00:53.480
+packaging, signing and uploading charts. Now, as with all of our other courses, we have video
+
+9
+00:00:53.480 --> 00:01:00.360
+lectures in this course that simplify complex topics. And these are followed by hands-on labs
+
+10
+00:01:00.360 --> 00:01:05.800
+that are embedded in the course where you'll work with the real Kubernetes cluster, right in your
+
+11
+00:01:05.800 --> 00:01:11.320
+browser. So you can go from watching a video and learning the concepts to practicing through
+
+12
+00:01:11.320 --> 00:01:20.000
+challenging hands-on lab exercises in just a few seconds. Well, I can't wait to get started. So
+
+13
+00:01:20.000 --> 00:01:21.919
+I'll see you in the first lesson.

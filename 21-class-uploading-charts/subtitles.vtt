@@ -1,0 +1,153 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:05.360
+Now that we have packaged our chart and signed it, it's time to upload all of our hard work
+
+2
+00:00:05.360 --> 00:00:10.320
+online so that our users can easily install it with a simple command like helm install
+
+3
+00:00:11.760 --> 00:00:16.719
+my release, the repo / nginx or whatever it is that we have created.
+
+4
+00:00:18.080 --> 00:00:24.959
+Now generally, our chart repositories will contain these things, the packaged chart in our case,
+
+5
+00:00:24.959 --> 00:00:32.160
+this is the nginx chart.tgz file that we have created in the previous lesson, the index file
+
+6
+00:00:32.160 --> 00:00:37.680
+and index.yaml file that we will soon create will contain information about the chart repository,
+
+7
+00:00:37.680 --> 00:00:42.880
+the charts, it contains the checksums for our TGZ files, descriptions and so on. And this is
+
+8
+00:00:42.880 --> 00:00:47.680
+the file that Helm will read when we add a new repository with a command like helm repo,
+
+9
+00:00:48.639 --> 00:00:55.439
+where we add a repo to and point it to the chart repository, we'll soon take a look at
+
+10
+00:00:55.439 --> 00:01:01.680
+what contents we have here so that we understand better. And finally, the provenance
+
+11
+00:01:01.680 --> 00:01:07.360
+file we generated earlier in case users want to verify cryptographic signatures so that they can
+
+12
+00:01:07.360 --> 00:01:11.839
+be sure that they download the content that was approved by us and not some potentially
+
+13
+00:01:11.839 --> 00:01:16.800
+malicious content that some attacker could have uploaded to a compromised server.
+
+14
+00:01:18.000 --> 00:01:23.120
+So currently, we have the package which ends with the .tgz extension, the provenance file with
+
+15
+00:01:23.120 --> 00:01:30.639
+the .prov extension. And what we are missing is the index.yaml file. To generate the index
+
+16
+00:01:30.639 --> 00:01:36.160
+.yaml file, we first create a directory to group the required files together. And then
+
+17
+00:01:36.800 --> 00:01:41.599
+we create a directory called nginx chart files and move these two files under it.
+
+18
+00:01:42.720 --> 00:01:49.440
+Finally, we generate the index file, which is rather easy just using the Helm repo index command
+
+19
+00:01:49.440 --> 00:01:55.440
+and passing the location of the directory that we just created, which has the necessary files,
+
+20
+00:01:56.000 --> 00:02:02.879
+as well as point to the URL of the chart repository that we will be uploading this to
+
+21
+00:02:03.919 --> 00:02:11.039
+under the Nginx chart files directory, we now see the index.yaml file. So let's take a closer
+
+22
+00:02:11.039 --> 00:02:17.039
+look at that index.yaml file. The info we see here is pretty straightforward. As far as Helm
+
+23
+00:02:17.679 --> 00:02:23.839
+is concerned, the URLs section is what is most important. So this tells it the locations
+
+24
+00:02:23.839 --> 00:02:29.919
+from where it can download charts whenever users want to install something from this repository.
+
+25
+00:02:29.919 --> 00:02:35.199
+And it also lists all the entries that are the charts that are available in this particular
+
+26
+00:02:35.759 --> 00:02:43.119
+repository. So now that we have the three files ready, it's time to upload them to a chart repository.
+
+27
+00:02:43.919 --> 00:02:51.759
+Now, the upload just works like any upload, you could just upload your charts to wherever you want,
+
+28
+00:02:52.639 --> 00:02:58.160
+such as a web server that you control or a service like Google Cloud Storage bucket or Amazon S3
+
+29
+00:02:58.160 --> 00:03:04.479
+bucket, a DigitalOcean object storage and so on. And so these services are very cost
+
+30
+00:03:04.479 --> 00:03:10.479
+effective and super easy to maintain, you could upload the files to GitHub Pages as well. And
+
+31
+00:03:10.479 --> 00:03:17.199
+there's a process for that. So when you upload, once you upload these files, get the URL
+
+32
+00:03:17.199 --> 00:03:23.279
+to the storage location, this could be the S3 bucket or the Google Storage bucket, or to where
+
+33
+00:03:23.279 --> 00:03:30.880
+you have uploaded the file. And then all that you need is share that URL to those who need to
+
+34
+00:03:30.880 --> 00:03:36.320
+download your chart. And so as we discussed earlier, add the repository to the local Helm
+
+35
+00:03:36.320 --> 00:03:43.279
+repos list. So run the Helm repo add command to add the new repository, and then run the Helm
+
+36
+00:03:43.279 --> 00:03:49.839
+repo list command to confirm that the new repository has been added. And then we install our
+
+37
+00:03:49.839 --> 00:03:56.399
+new cool chart using the Helm install command, and then specify the repository name slash the chart
+
+38
+00:03:56.399 --> 00:04:00.880
+name. Well, that's all for now. And I will see you in the next video.

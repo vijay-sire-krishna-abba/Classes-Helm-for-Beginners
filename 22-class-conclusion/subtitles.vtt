@@ -1,0 +1,41 @@
+WEBVTT
+
+1
+00:00:00.320 --> 00:00:05.600
+Well, thank you so much for watching this course. Through this course, we got an introduction to
+
+2
+00:00:05.600 --> 00:00:10.960
+Helm and understood the basic concepts. We discussed the basics of Helm, we saw
+
+3
+00:00:10.960 --> 00:00:16.320
+how to install Helm and get started with it. We saw the architecture of Helm, we looked at charts,
+
+4
+00:00:17.360 --> 00:00:23.360
+releases, revisions, repositories. And we also saw how to write our own charts. So we looked
+
+5
+00:00:23.360 --> 00:00:27.920
+at functions, we understood pipelines, conditionals, with blocks, ranges, and hooks.
+
+6
+00:00:28.639 --> 00:00:35.279
+And finally, we also looked at the packaging, signing and uploading mechanisms. Please share
+
+7
+00:00:35.279 --> 00:00:40.320
+your feedback on what additional topics you'd like for us to cover. And we will make put in
+
+8
+00:00:40.320 --> 00:00:47.040
+our best efforts to add those to this course. I hope you enjoyed this course, and the associated
+
+9
+00:00:47.040 --> 00:00:53.919
+labs as much as I enjoyed building it. So don't forget to share your course completion certificate
+
+10
+00:00:53.919 --> 00:00:59.680
+on social media. Until next time, this is Mumshad Mannambeth signing off. Goodbye

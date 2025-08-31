@@ -1,0 +1,297 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:07.920
+Let's talk about lifecycle management with Helm. Now lifecycle management can sound like a fancy
+
+2
+00:00:07.920 --> 00:00:14.320
+technical term that's too abstract to understand at first glance. So let's translate it into plain
+
+3
+00:00:14.320 --> 00:00:21.680
+English by taking a look at some practical examples. Now, each time we pull in a chart
+
+4
+00:00:21.680 --> 00:00:26.400
+and install it, a release is created. As discussed in the previous lessons,
+
+5
+00:00:27.120 --> 00:00:33.279
+a release is somewhat similar to an app. But more specifically, it represents a package or a
+
+6
+00:00:33.279 --> 00:00:39.840
+collection of Kubernetes objects. Now since Helm knows what Kubernetes objects belong to each
+
+7
+00:00:39.840 --> 00:00:47.040
+release, it can do things like upgrades, downgrades or uninstalls without touching objects
+
+8
+00:00:47.040 --> 00:00:52.320
+that might belong to other releases. So each release can be managed independently,
+
+9
+00:00:52.320 --> 00:00:59.680
+even if they're all based on the same chart. Now let's just create a new release and discuss this
+
+10
+00:00:59.680 --> 00:01:06.720
+as we go along. So we'll install a pretty old version of this NGINX chart. By the way, you can
+
+11
+00:01:06.720 --> 00:01:12.639
+pass in a specific version of a Helm chart to install using the version option in the install command
+
+12
+00:01:12.639 --> 00:01:20.239
+like this. We now have an NGINX release, plainly called NGINX release. And now imagine two months
+
+13
+00:01:20.239 --> 00:01:25.440
+go by, which is a long time for any piece of software, but especially for a website,
+
+14
+00:01:25.440 --> 00:01:30.959
+a lot of security vulnerabilities get discovered and they need to be patched up. Now our NGINX
+
+15
+00:01:30.959 --> 00:01:36.239
+hosted website may have many objects in our Kubernetes cluster. When we upgrade the Pods
+
+16
+00:01:36.239 --> 00:01:43.680
+running NGINX. Maybe we also need to make some changes to other Kubernetes objects. For example,
+
+17
+00:01:43.680 --> 00:01:48.559
+the newer version of NGINX may require a new environment variable to be set or new secret
+
+18
+00:01:48.559 --> 00:01:52.720
+to be created, which requires changing configuration objects and other files part of
+
+19
+00:01:52.720 --> 00:01:57.199
+the manifest files. But it may be hard to keep track of all pieces that need to be changed.
+
+20
+00:01:57.839 --> 00:02:02.800
+Fortunately, as we said, Helm keeps track of everything associated with a release. So we
+
+21
+00:02:02.800 --> 00:02:08.479
+don't have to upgrade our objects one by one, Helm can automatically upgrade them all with one single
+
+22
+00:02:08.479 --> 00:02:14.399
+command. But first, let's see what version of nginx is running in our Pod, we initially have
+
+23
+00:02:14.399 --> 00:02:20.479
+to find out the name of our nginx Pod. So we run the kubectl get Pods command to see the Pod that
+
+24
+00:02:20.479 --> 00:02:26.880
+we created. Then we run a kubectl describe Pod command to see more details about the image. And
+
+25
+00:02:26.880 --> 00:02:36.320
+we see that it's running nginx version 1.19.2. So that's pretty old. Now let's see a Helm upgrade
+
+26
+00:02:36.320 --> 00:02:44.160
+in action. The command is rather simple. So we just tell Helm what release we want to upgrade.
+
+27
+00:02:44.160 --> 00:02:52.479
+And then specify the chart that this release is based on. So we now run the Helm upgrade command
+
+28
+00:02:52.479 --> 00:03:00.479
+to upgrade the nginx release. So revision one is now replaced by revision two. Note the revision number
+
+29
+00:03:00.479 --> 00:03:07.360
+in the output of the Helm upgrade command. So did the Helm upgrade command really do its job? Let's
+
+30
+00:03:07.360 --> 00:03:12.880
+check. In the upgrade process, the old pod gets destroyed and a new one gets created. So we need
+
+31
+00:03:12.880 --> 00:03:19.119
+to get the name of the new one. So we follow the same Helm process again and get the new pod name,
+
+32
+00:03:20.000 --> 00:03:28.320
+then run a describe on it. And we see the new version which is nginx 1.21.4. So there you have
+
+33
+00:03:28.320 --> 00:03:34.080
+it, we just went through the so-called lifecycle management with Helm, a release can exist for
+
+34
+00:03:34.080 --> 00:03:41.199
+months or years. And Helm can manage its lifecycle in many ways by keeping track of its current state,
+
+35
+00:03:41.839 --> 00:03:47.679
+previous states and bringing it into future states. So in this case, we brought the release into a
+
+36
+00:03:47.679 --> 00:03:54.000
+future state by upgrading it. But Helm kept a record of the previous state too, we noticed
+
+37
+00:03:54.000 --> 00:04:00.000
+the revision number changing to two. So the previous state would be revision one. Now how
+
+38
+00:04:00.000 --> 00:04:06.479
+does that help us? Let's take a look at our releases, run the Helm list command to list
+
+39
+00:04:06.479 --> 00:04:11.759
+the current releases. And we have our nginx release listed, we see the current revision
+
+40
+00:04:11.759 --> 00:04:17.440
+number which happens to be two. In this case, we know what the previous revision was and what the
+
+41
+00:04:17.440 --> 00:04:23.040
+current one is. But say we work in a big team and lots of people manage their releases. This output
+
+42
+00:04:23.040 --> 00:04:29.920
+doesn't really tell us what happened. So how do we dig deeper? Run the Helm history command to see
+
+43
+00:04:29.920 --> 00:04:36.160
+more details about a particular release. This is a lot more helpful, we can clearly see a lot of
+
+44
+00:04:36.160 --> 00:04:43.760
+useful things. What chart version was or is used in each revision, what app version was or is used
+
+45
+00:04:43.760 --> 00:04:50.640
+in each revision? What action actually created that revision? Was it an install, an upgrade, or
+
+46
+00:04:50.640 --> 00:04:56.720
+a rollback? So this paints a clear picture of the stages our release went through its lifecycle
+
+47
+00:04:56.720 --> 00:05:03.200
+history. Now let's assume this upgrade did something that we don't like. Helm's lifecycle
+
+48
+00:05:03.200 --> 00:05:09.440
+management allows for another cool thing called rollback. This lets us return a release to a
+
+49
+00:05:09.440 --> 00:05:16.000
+previous state. So in this case, we want to return to revision one. So in this case, we run the
+
+50
+00:05:16.000 --> 00:05:22.000
+command Helm rollback nginx release and specify the revision number that we want to roll back to.
+
+51
+00:05:22.000 --> 00:05:28.720
+And that is revision one. Now when you do that, remember Helm reverts all configuration to how it
+
+52
+00:05:28.720 --> 00:05:33.440
+was previously in revision one. But technically, it does not go back to revision one. Instead,
+
+53
+00:05:33.440 --> 00:05:39.600
+it creates a new revision tree with a similar configuration as in revision one. So if
+
+54
+00:05:39.600 --> 00:05:45.200
+you list Helm revisions, with the Helm history command, now you will see that there are three
+
+55
+00:05:45.200 --> 00:05:51.760
+versions with revision one and two having the same chart and the app versions and there is a note in
+
+56
+00:05:51.760 --> 00:05:58.320
+the description that says it's a rollback to revision one. It's worth mentioning that we chose nginx
+
+57
+00:05:58.320 --> 00:06:06.079
+here as it's simple to upgrade. But there will be Kubernetes packages that may require a few extra
+
+58
+00:06:06.079 --> 00:06:12.320
+steps to upgrade. For example, if we had tried to upgrade the previous WordPress release
+
+59
+00:06:12.320 --> 00:06:17.760
+that we created, we would have got this output. Now that's not to say that this is a problem.
+
+60
+00:06:17.760 --> 00:06:21.760
+It can be easily solved by adding some more parameters to the command line as instructed
+
+61
+00:06:21.760 --> 00:06:27.359
+in the text. But why does this happen? In this case, Helm cannot upgrade everything without
+
+62
+00:06:27.359 --> 00:06:32.880
+having access to some administrative passwords. It needs administrative access to the database
+
+63
+00:06:32.880 --> 00:06:38.079
+and to the WordPress website itself, so that it can get permissions to make necessary changes.
+
+64
+00:06:39.760 --> 00:06:45.279
+It's also worth mentioning that all the rollbacks are very similar to a backup restore feature,
+
+65
+00:06:45.279 --> 00:06:52.239
+it doesn't cover file or directory data that may be created by our applications. Instead,
+
+66
+00:06:52.239 --> 00:06:57.359
+Helm backs up and restores the declarations or manifest files of our Kubernetes objects.
+
+67
+00:06:57.359 --> 00:07:04.079
+So for things that use persistent volumes, or other forms of persistent data, or something
+
+68
+00:07:04.079 --> 00:07:10.399
+that is external, maybe like an external database, the rollback won't restore that data to,
+
+69
+00:07:11.119 --> 00:07:16.720
+for example, imagine your rollback MySQL database server, the MySQL Pods will be restored to their
+
+70
+00:07:16.720 --> 00:07:24.399
+previous states, software versions used, and so on. But the actual database, its data will remain
+
+71
+00:07:24.399 --> 00:07:31.440
+the same, its data is not going to be backed up or restored. So there are options available to
+
+72
+00:07:31.440 --> 00:07:37.839
+take consistent backups of databases before upgrading charts, or even to roll back or
+
+73
+00:07:37.839 --> 00:07:44.239
+restore databases. But they're done using what is known as Chart Hooks, which we will discuss
+
+74
+00:07:44.239 --> 00:07:51.200
+later in this course. Well, that's all for now, head over to the labs and get some hands-on practice.

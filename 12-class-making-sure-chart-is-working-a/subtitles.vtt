@@ -1,0 +1,233 @@
+WEBVTT
+
+1
+00:00:00.720 --> 00:00:07.280
+Now that we have developed our first chart, let's make sure the chart is working as intended. Now,
+
+2
+00:00:07.280 --> 00:00:14.240
+there are three ways to verify your Helm charts before installing them. Linting helps us verify
+
+3
+00:00:14.240 --> 00:00:22.160
+that the chart and the YAML format is correct. Secondly, verifying the template helps us make
+
+4
+00:00:22.160 --> 00:00:27.920
+sure that the templating part is working as expected. And the third option is the dry run
+
+5
+00:00:27.920 --> 00:00:33.680
+option, which helps us make sure that the chart works well with Kubernetes itself. So let's look
+
+6
+00:00:33.680 --> 00:00:40.160
+at each of these in more detail. So how do we make sure that our chart is built correctly without any
+
+7
+00:00:40.160 --> 00:00:44.799
+formatting errors or wrong values? Say for instance, while building the chart, we made a
+
+8
+00:00:44.799 --> 00:00:50.639
+few mistakes such as accidentally not having enough spaces before a line, thereby resulting
+
+9
+00:00:50.639 --> 00:00:57.119
+in an incorrect format or making a typo in using a variable name such as a release with two e's
+
+10
+00:00:57.119 --> 00:01:04.480
+instead of an E and an A. So what do you do in such case? How do you catch these errors? For this run
+
+11
+00:01:04.480 --> 00:01:10.000
+the helm lint command and specify the path to the chart directory. This command goes through the
+
+12
+00:01:10.000 --> 00:01:15.279
+files in the chart and validates their format and looks for errors. It highlights the two errors and
+
+13
+00:01:15.279 --> 00:01:22.239
+tells us which file and what line the errors are on. The typo error is at line four and the YAML
+
+14
+00:01:22.239 --> 00:01:28.720
+indentation error is at line 20. And fixing these errors and running the command again tells us
+
+15
+00:01:29.519 --> 00:01:36.720
+the lint is completed and there are zero chart failures. So you can see that it also recommends
+
+16
+00:01:36.720 --> 00:01:42.239
+best practices such as adding an icon is recommended in the Chart.yaml file.
+
+17
+00:01:43.760 --> 00:01:48.639
+Now that we have made sure there are no errors in the format of the file, we want to make sure that
+
+18
+00:01:48.639 --> 00:01:54.239
+the templating stuff we added in the deployment or YAML file is actually generating what we'd
+
+19
+00:01:54.239 --> 00:02:01.599
+expect in the final parsed manifest file that it will send to Kubernetes. So meaning there is the
+
+20
+00:02:01.599 --> 00:02:08.320
+release.name will translate to the actual release name and the properties in values file
+
+21
+00:02:08.320 --> 00:02:15.119
+will translate to the values listed there. So we can verify what would be generated with the Helm
+
+22
+00:02:15.119 --> 00:02:20.880
+template command followed by the chart name. The Helm template command renders a chart template
+
+23
+00:02:20.880 --> 00:02:27.360
+locally and displays the output. This output shows us what each template.yaml file would generate
+
+24
+00:02:27.360 --> 00:02:34.559
+and everything looks correct. The values we defined in the values.yaml file were picked and used
+
+25
+00:02:34.559 --> 00:02:41.360
+by our deployment or YAML template file, such as a replica count and the image name. Also,
+
+26
+00:02:41.360 --> 00:02:48.639
+if you notice the release name is mentioned as release-name and in capital letters.
+
+27
+00:02:48.639 --> 00:02:56.240
+Now this is because we haven't specified a release name in the command itself. So if you don't pass
+
+28
+00:02:56.240 --> 00:03:02.399
+in a release name, this is what you will see. That's the default release name that it applies
+
+29
+00:03:02.399 --> 00:03:08.080
+when you run the Helm template command. So you could pass in a release name in the command,
+
+30
+00:03:08.720 --> 00:03:13.679
+just like how you would pass in a release name in the install command. And then it generates
+
+31
+00:03:13.679 --> 00:03:20.000
+a new file with the release name that you've specified in the Helm template command.
+
+32
+00:03:23.279 --> 00:03:30.000
+Now, if there was an error in one of the template files, say for example, it was malformed,
+
+33
+00:03:30.000 --> 00:03:35.520
+and there is an indentation error in one of the files, the template command will fail with an
+
+34
+00:03:35.520 --> 00:03:43.440
+error. However, it might not be obvious as to what exactly the error is at times.
+
+35
+00:03:43.440 --> 00:03:52.880
+For example, in this case, the name under metadata is not intended correctly. It might help to see how
+
+36
+00:03:52.880 --> 00:03:58.160
+the YAML file was generated. So you can spot the issue because from the output of this particular
+
+37
+00:03:58.160 --> 00:04:05.520
+Helm template command, it's not very clear as to what is the exact file that was generated,
+
+38
+00:04:06.160 --> 00:04:13.520
+which has this particular indentation issue. So to see the YAML file that was generated,
+
+39
+00:04:13.520 --> 00:04:19.839
+which caused the error, use the debug flag along with the Helm template command like this,
+
+40
+00:04:19.839 --> 00:04:25.200
+and it displays the generated YAML file in the output. And this can be handy to view what the
+
+41
+00:04:25.200 --> 00:04:33.200
+cause of the issue is. So we have verified that the YAML format is correct using the Helm link
+
+42
+00:04:33.200 --> 00:04:39.760
+command. And we have verified that Helm templating is working as expected using the Helm template
+
+43
+00:04:39.760 --> 00:04:46.959
+command. And these two steps help us catch a lot of errors. However, there are still other errors
+
+44
+00:04:46.959 --> 00:04:53.200
+that we could make that may not be caught by these commands. For example, we made a mistake with the
+
+45
+00:04:53.200 --> 00:05:00.640
+Kubernetes manifest file. So instead of containers, we wrote container in the singular form.
+
+46
+00:05:01.760 --> 00:05:07.279
+And neither the Helm link command, nor the Helm template command is going to catch this, because
+
+47
+00:05:07.279 --> 00:05:13.279
+the YAML format is correct, and the templating is correct as well. So what's wrong is the Kubernetes
+
+48
+00:05:13.279 --> 00:05:20.320
+manifest format. So only Kubernetes can tell us that this is wrong. To catch this, we could run
+
+49
+00:05:20.320 --> 00:05:26.959
+the same Helm install command that we ran earlier to install the Helm chart, but with the dry run
+
+50
+00:05:26.959 --> 00:05:32.559
+option. So this just pretends to install the package to the cluster, and it can catch things
+
+51
+00:05:32.559 --> 00:05:39.600
+that Kubernetes would complain about in a real install. Once the issues are fixed, we run the
+
+52
+00:05:39.600 --> 00:05:46.320
+Helm install command, again, with the dry run option, and you should see the YAML files in their
+
+53
+00:05:47.279 --> 00:05:54.160
+final format, but does not actually install the applications or make any changes to the actual
+
+54
+00:05:54.160 --> 00:05:59.920
+cluster. This is just going to do a dry run. So this is a handy way of making sure that everything
+
+55
+00:05:59.920 --> 00:06:06.399
+is working as expected before performing the real install. Well, that's it for this lecture,
+
+56
+00:06:06.399 --> 00:06:11.359
+we'll head over to the labs and practice working on building some basic charts and making sure that
+
+57
+00:06:11.359 --> 00:06:16.880
+the charts you build are working as expected. And we will continue learning more about developing
+
+58
+00:06:16.880 --> 00:06:18.799
+charts in the upcoming videos.

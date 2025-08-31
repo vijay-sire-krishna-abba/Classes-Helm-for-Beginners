@@ -1,0 +1,305 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:07.440
+Let's talk about chart hooks. Now earlier, we discussed that, besides just installing various
+
+2
+00:00:07.440 --> 00:00:14.240
+Kubernetes objects to get our app up and running, they can do some extra stuff too. For example,
+
+3
+00:00:14.240 --> 00:00:20.639
+we can write the charts in such a way that whenever we do a Helm upgrade, a database can
+
+4
+00:00:20.639 --> 00:00:27.520
+be automatically backed up before the upgrade. So we have a way to restore from backup in case
+
+5
+00:00:27.520 --> 00:00:33.200
+something goes wrong. Or it could be sending an email alert before an upgrade operation or putting
+
+6
+00:00:33.200 --> 00:00:39.759
+up a site-wide announcement bar or something and removing it after the upgrade, right.
+
+7
+00:00:39.759 --> 00:00:47.279
+So these extra actions are implemented with what is known as hooks. Let's look at what those are
+
+8
+00:00:47.279 --> 00:00:53.439
+in this video. So here's the typical workflow of events in Helm. So when a user installs or
+
+9
+00:00:53.439 --> 00:01:00.320
+upgrades a Helm chart, using helm install or upgrade command, Helm verifies the files and
+
+10
+00:01:00.320 --> 00:01:04.800
+templates in the chart, and then renders the manifest files in their final form. And in the
+
+11
+00:01:04.800 --> 00:01:11.680
+final step installs services on the cluster. So that's what is called as the install or upgrade
+
+12
+00:01:11.680 --> 00:01:18.720
+phase, where the manifest files are applied on the Kubernetes cluster. Now our requirement is to take
+
+13
+00:01:18.720 --> 00:01:25.279
+a backup of the database before the chart is actually installed before the upgrade phase.
+
+14
+00:01:25.279 --> 00:01:33.199
+So we use the pre-upgrade hook. The pre-upgrade hook runs a predefined action, which could really
+
+15
+00:01:33.199 --> 00:01:40.400
+be anything. In our case, it is to take a backup of the database with a pre-install hook in place.
+
+16
+00:01:40.400 --> 00:01:46.160
+Helm waits for this action to be completed. And for it to be ready in a ready state before
+
+17
+00:01:46.160 --> 00:01:51.040
+proceeding to the final phase of installation or upgrading applications on Kubernetes.
+
+18
+00:01:52.239 --> 00:01:56.959
+Now after the upgrade phase, we'd like to perform some kind of cleanup activity
+
+19
+00:01:56.959 --> 00:02:02.559
+or send out announcements of some kind. For this, we add a post-upgrade hook.
+
+20
+00:02:04.480 --> 00:02:09.360
+The post-upgrade hook runs after the install phase is successful,
+
+21
+00:02:09.360 --> 00:02:14.479
+and performs actions configured, such as sending an email status update of some sorts.
+
+22
+00:02:16.880 --> 00:02:22.559
+Now apart from the pre-upgrade and post-upgrade hooks, there are pre-install and post-install
+
+23
+00:02:22.559 --> 00:02:28.240
+hooks that run during the install operations, the pre-delete and post-delete hooks that run
+
+24
+00:02:28.240 --> 00:02:34.559
+during deletion requests, the pre-rollback and post-rollback hooks that run during rollbacks.
+
+25
+00:02:35.839 --> 00:02:39.600
+So let's now see how these hooks are configured.
+
+26
+00:02:39.679 --> 00:02:45.759
+So how do you get something done in Kubernetes, say you have a script to backup the database
+
+27
+00:02:45.759 --> 00:02:53.600
+called backup.sh. Now how do you get that script executed by Kubernetes? So you develop
+
+28
+00:02:53.600 --> 00:03:03.679
+the script, and then run it as a pod. Now we know that a pod runs forever. But we only want the
+
+29
+00:03:03.759 --> 00:03:13.440
+script to be run once. So if you only wanted it to run once, then you create a job instead of a pod.
+
+30
+00:03:14.479 --> 00:03:21.039
+So it is through Kubernetes objects such as Pods or Jobs that we configure hooks in Helm charts.
+
+31
+00:03:21.839 --> 00:03:27.360
+So here's a manifest file to create a Job that runs the backup script using an Alpine image.
+
+32
+00:03:27.919 --> 00:03:32.639
+And this file is placed along with the other templates in the templates directory.
+
+33
+00:03:33.199 --> 00:03:37.759
+Now we know that all the files in the templates directory are rendered as Kubernetes manifests
+
+34
+00:03:37.759 --> 00:03:44.240
+files when the chart is installed to deploy the services. But this job shouldn't work like that
+
+35
+00:03:44.240 --> 00:03:50.240
+it has to be run before the install phase as a pre-install hook and not during the
+
+36
+00:03:50.240 --> 00:03:57.520
+install or upgrade phase with the rest of the application. It has to be run during the pre
+
+37
+00:03:57.520 --> 00:04:03.279
+upgrade as part of the pre-upgrade process. So how do we differentiate the chart hook from the
+
+38
+00:04:03.279 --> 00:04:10.559
+normal template files? How do you tell Helm that this job that we've created is a pre-upgrade hook
+
+39
+00:04:10.559 --> 00:04:19.200
+and not a usual template? For this we add an annotation. Annotations are a way for us to
+
+40
+00:04:19.200 --> 00:04:26.559
+add additional metadata to an object which may be used by clients of Kubernetes, in this case Helm,
+
+41
+00:04:26.640 --> 00:04:34.480
+to store data about that object and perform some kind of actions. So we add an annotation
+
+42
+00:04:34.480 --> 00:04:42.640
+with the key Helm.sh/hook and the value set to pre-upgrade. This configures this job
+
+43
+00:04:42.640 --> 00:04:49.600
+as a pre-upgrade hook and Helm no longer considers this file as a regular template file.
+
+44
+00:04:50.079 --> 00:04:56.640
+Now this job will run before the upgrade step when a chart is upgraded. And similarly,
+
+45
+00:04:56.640 --> 00:05:02.000
+by changing the setting in this annotation, we can configure a job to be a pre-install hook or
+
+46
+00:05:02.000 --> 00:05:08.720
+a pre-delete hook, pre-upgrade or pre-rollback hook. And the same goes for the post hooks like
+
+47
+00:05:08.720 --> 00:05:15.920
+the post-install and post-delete and post-upgrade hooks. So coming back to this example use case,
+
+48
+00:05:16.640 --> 00:05:21.839
+we have now understood how hooks work and when they are run and how they can be configured.
+
+49
+00:05:22.720 --> 00:05:27.760
+We can have multiple hooks configured for each step. For example, we can have multiple pre-upgrade
+
+50
+00:05:27.760 --> 00:05:33.119
+hooks configured. And this could be for performing other activities such as making an external API
+
+51
+00:05:33.119 --> 00:05:41.760
+call to kick off some automation to, let's say, add a banner on the site and send out an email
+
+52
+00:05:41.760 --> 00:05:47.279
+announcement. And these may need to be done in some particular order. The email announcement has
+
+53
+00:05:47.279 --> 00:05:52.799
+to go first, then the site-wide banner has to be displayed and finally the backup to be started.
+
+54
+00:05:52.799 --> 00:05:59.040
+So how do we define in what order these hooks are to be executed, we can set weights for each hook,
+
+55
+00:05:59.920 --> 00:06:05.519
+these could be negative or positive numbers. So we set a weight for each job in the order
+
+56
+00:06:05.519 --> 00:06:12.559
+they should be run. During the chart installation phase Helm sorts these in ascending order
+
+57
+00:06:14.320 --> 00:06:21.920
+and executes them in that order. So to set a weight for a hook, add the annotation helm.sh
+
+58
+00:06:21.920 --> 00:06:30.480
+slash hook dash weight, and then set the value as a string. Note that you can set the same weight
+
+59
+00:06:30.480 --> 00:06:37.760
+for multiple hooks. And if you do so, they will be sorted by resource kind. And finally, by name
+
+60
+00:06:37.760 --> 00:06:45.600
+in ascending order and then executed that way. Now, what happens after the backup job is completed,
+
+61
+00:06:46.239 --> 00:06:51.679
+the resource created for the hook, which is in this case is the job resource is going to stay
+
+62
+00:06:51.679 --> 00:06:57.839
+on as a resource on the cluster, we can configure them to be cleaned up by setting hook deletion
+
+63
+00:06:57.839 --> 00:07:05.600
+policies. For this, we add the annotation hook delete policy and set a supported value. Now hook
+
+64
+00:07:06.160 --> 00:07:12.399
+succeeded deletes the resource after the hook is successfully executed. Of course, this means that
+
+65
+00:07:12.399 --> 00:07:19.359
+if the hook fails to execute, the resources won't be deleted, which might actually be useful,
+
+66
+00:07:19.359 --> 00:07:25.200
+as maybe we'd want to debug such a failure, see what went wrong. So it's advantageous that
+
+67
+00:07:25.200 --> 00:07:32.480
+we still have the resource around. Hook failed deletes the resource even if the hook failed
+
+68
+00:07:32.480 --> 00:07:38.480
+execution. And the default value, if no hook deletion policy is specified, is the last one
+
+69
+00:07:38.480 --> 00:07:45.200
+that is the before hook creation policy. Now this deletes the previous resource before a new hook is
+
+70
+00:07:45.200 --> 00:07:51.119
+launched. So the first time this runs, there won't be a resource to be deleted. So it doesn't matter.
+
+71
+00:07:51.119 --> 00:07:56.880
+But say this pre-upgrade hook creates the backup job object. And the next time we upgrade,
+
+72
+00:07:56.880 --> 00:08:02.480
+the pre-upgrade hook will delete the old Kubernetes object that was left hanging around after the last
+
+73
+00:08:02.480 --> 00:08:08.720
+upgrade. And after it deletes the old object, the new object is created and this too is left hanging
+
+74
+00:08:08.720 --> 00:08:14.160
+around until the next upgrade command is run. So this also helps avoid situations where the hook
+
+75
+00:08:14.160 --> 00:08:19.679
+would try to create a duplicate object with the same name and Kubernetes might complain that that
+
+76
+00:08:19.679 --> 00:08:26.640
+object already exists. Well, that's all for now. And I will see you in the next one.

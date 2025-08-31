@@ -1,0 +1,293 @@
+WEBVTT
+
+1
+00:00:00.560 --> 00:00:06.960
+There were some significant changes when Helm 3 was released compared to Helm 2. And when you
+
+2
+00:00:06.960 --> 00:00:13.760
+browse through charts and blogs online, you may come across either of these versions. So it is
+
+3
+00:00:13.760 --> 00:00:20.160
+important to understand the differences between them. Now let's look at a brief history of Helm.
+
+4
+00:00:20.160 --> 00:00:29.120
+Helm 1.0 was first released in February 2016. Helm 2.0 in November 2016, and Helm 3.0 in November
+
+5
+00:00:29.120 --> 00:00:36.560
+2019. Now since the initial launch in 2016, the project has matured and it got better and better.
+
+6
+00:00:37.119 --> 00:00:43.279
+The improvements were also made possible by the fact that Kubernetes itself was improving. So
+
+7
+00:00:43.279 --> 00:00:50.320
+Helm had more tools at its disposal, it could leverage right off of Kubernetes. In our lessons,
+
+8
+00:00:50.320 --> 00:00:57.360
+we'll use Helm 3, which has a simpler and better design than the previous Helm 2 and is also a bit
+
+9
+00:00:57.360 --> 00:01:04.160
+smarter. Since Helm 2 was around for a few years, a lot of users had already been using it. But
+
+10
+00:01:04.160 --> 00:01:11.120
+there are several important changes made when Helm 3 was launched. So let's take a look at the differences
+
+11
+00:01:11.120 --> 00:01:19.199
+between them. Helm has a CLI client installed on your local machine that helps you perform
+
+12
+00:01:19.199 --> 00:01:26.080
+Helm specific actions against your Kubernetes cluster. When Helm 2 was around, Kubernetes
+
+13
+00:01:26.080 --> 00:01:32.400
+lacked features such as role-based access control and custom resource definitions. To allow Helm to
+
+14
+00:01:32.400 --> 00:01:38.720
+do its magic, an extra component called Tiller had to be installed in the Kubernetes cluster.
+
+15
+00:01:39.279 --> 00:01:45.440
+So whenever you wanted to perform a Helm specific operation, your Helm client communicated with
+
+16
+00:01:45.440 --> 00:01:52.239
+Tiller that was running on some server. Tiller in turn communicated with Kubernetes and proceeded
+
+17
+00:01:52.239 --> 00:01:59.680
+to take actions to make whatever you requested happen. So Tiller was the middleman, so to speak.
+
+18
+00:02:00.959 --> 00:02:07.360
+Besides the fact that an extra component sitting between you and Kubernetes adds complexity,
+
+19
+00:02:07.360 --> 00:02:15.360
+there were also some security concerns. By default, Tiller was running in God mode,
+
+20
+00:02:15.360 --> 00:02:21.919
+or otherwise said it had the privileges to do anything that it wanted. This was good since
+
+21
+00:02:21.919 --> 00:02:28.559
+it allowed it to make whatever changes necessary in your Kubernetes cluster to install your charts.
+
+22
+00:02:28.559 --> 00:02:35.119
+But this was bad since it allowed any user with Tiller access to do whatever they wanted in the
+
+23
+00:02:35.119 --> 00:02:43.839
+cluster. After cool stuff like role-based access control and custom resource definitions appeared
+
+24
+00:02:43.839 --> 00:02:51.199
+in Kubernetes, the need for Tiller decreased. And so it was removed entirely in Helm 3.
+
+25
+00:02:52.000 --> 00:02:58.800
+Now there's nothing sitting between Helm and the cluster. Furthermore, with RBAC security is
+
+26
+00:02:58.800 --> 00:03:04.800
+much improved and any user can be limited in what they can do with Helm. Before you had to set these
+
+27
+00:03:04.800 --> 00:03:11.119
+limits in Tiller. And that was not the best option. But with RBAC built from ground up to fine tune
+
+28
+00:03:11.119 --> 00:03:16.479
+user permissions in Kubernetes, it's now straightforward to do. As far as Kubernetes
+
+29
+00:03:16.479 --> 00:03:21.919
+is concerned, it doesn't matter if the user is trying to make changes within the cluster
+
+30
+00:03:21.919 --> 00:03:27.679
+with kubectl or with Helm commands. The user requesting the changes has the same
+
+31
+00:03:27.679 --> 00:03:36.559
+RBAC allowed permissions, whatever tool they use. So that's a big difference between Helm 2 and
+
+32
+00:03:36.559 --> 00:03:44.000
+3. Helm 2 had Tiller and Helm 3 simplifies integration with Kubernetes by removing Tiller.
+
+33
+00:03:44.880 --> 00:03:52.720
+The next big difference is a three-way strategic merge patch. The name might sound intimidating,
+
+34
+00:03:52.720 --> 00:03:59.520
+but don't worry. At the end of this section, we'll see it's actually a simple but very smart thing
+
+35
+00:03:59.520 --> 00:04:06.880
+that can prove quite useful. Now Helm has something like a snapshot feature. Here's an example,
+
+36
+00:04:07.440 --> 00:04:14.880
+you can use a chart to install a full-blown WordPress website. This will create revision
+
+37
+00:04:14.880 --> 00:04:21.440
+number one for this install. Then if you change something, for example, you upgrade to a newer
+
+38
+00:04:21.440 --> 00:04:27.920
+chart to upgrade your WordPress install, you will arrive at revision number two. These revisions
+
+39
+00:04:27.920 --> 00:04:33.359
+can be considered something like snapshots, the exact state of a Kubernetes package at that moment
+
+40
+00:04:33.359 --> 00:04:40.399
+in time. If there's a need, you can return to revision number one, do a rollback. This would
+
+41
+00:04:40.399 --> 00:04:46.640
+get your package app to the same state it was when you first installed your chart.
+
+42
+00:04:48.320 --> 00:04:53.040
+New revisions are created whenever important changes are done with the Helm command. For
+
+43
+00:04:53.040 --> 00:04:58.559
+example, when we first install a package, a revision one is created. Then when we upgrade
+
+44
+00:04:58.559 --> 00:05:03.839
+that package, a new revision appears, there's revision two in this case. And even when we roll
+
+45
+00:05:03.839 --> 00:05:11.040
+back, a new revision is created revision three. So that's pretty straightforward. Helm 2 was less
+
+46
+00:05:11.040 --> 00:05:16.959
+sophisticated when it came to how we did such rollbacks. And when a rollback command is issued,
+
+47
+00:05:16.959 --> 00:05:23.440
+Helm compares the current chart, which is the chart that has the WordPress image 5.8. And it
+
+48
+00:05:23.440 --> 00:05:29.440
+compares with the previous chart, which is the chart that has a WordPress 4.8 image in it and realizes that
+
+49
+00:05:29.440 --> 00:05:35.440
+they are different. So it applies the original chart to revert the WordPress image to 4.8.
+
+50
+00:05:37.040 --> 00:05:42.000
+Now let's look at another example. Save install a WordPress deployment using a Helm chart, which
+
+51
+00:05:42.000 --> 00:05:50.559
+creates revision one just like before, then a user manually goes in and updates the application image
+
+52
+00:05:50.559 --> 00:05:55.440
+using the kubectl set image command. So the application gets updated. And this is done
+
+53
+00:05:55.440 --> 00:06:02.000
+instead of doing the upgrade through Helm. And this does not create a new revision in Helm because the
+
+54
+00:06:02.000 --> 00:06:09.440
+change was not performed through Helm. When we now roll back, what happens? As before,
+
+55
+00:06:09.440 --> 00:06:15.600
+Helm compares the current revision with the previous version. Since there is only one
+
+56
+00:06:15.600 --> 00:06:21.359
+revision, Helm does not detect any changes. And so it does not roll back or make any changes to
+
+57
+00:06:21.359 --> 00:06:28.399
+the deployment. So Helm 2 compares the current chart with the previous chart to identify the
+
+58
+00:06:28.399 --> 00:06:34.559
+difference between revisions to make a rollback decision. And in this case, it doesn't help us
+
+59
+00:06:34.559 --> 00:06:40.959
+because the manual change that the user made is still active. Helm 3, on the other hand,
+
+60
+00:06:40.959 --> 00:06:46.640
+is more intelligent. It compares the chart currently in use if we had created a revision,
+
+61
+00:06:46.640 --> 00:06:54.799
+that is which we didn't the chart we want to revert to. And also the live state how our
+
+62
+00:06:54.799 --> 00:07:03.440
+Kubernetes objects currently look like their declarations in the YAML form. This is where
+
+63
+00:07:03.440 --> 00:07:11.119
+that fancy three-way strategic merge patch name comes from. By also looking at the live state,
+
+64
+00:07:11.119 --> 00:07:18.959
+it notices that the image version in live is 5.8. But the image in revision one that we want to
+
+65
+00:07:18.959 --> 00:07:25.440
+revert to is at 4.8. So it makes necessary changes to come back to the original state.
+
+66
+00:07:26.799 --> 00:07:32.320
+Now besides rollbacks, there are also things like upgrades to consider, where Helm 2 was also
+
+67
+00:07:32.320 --> 00:07:37.359
+lacking, for example, say you install a chart, but then you make some changes to some of the
+
+68
+00:07:37.359 --> 00:07:42.640
+Kubernetes objects installed. It all works nicely until you perform an upgrade. Helm 2 looks at
+
+69
+00:07:42.640 --> 00:07:47.519
+the old chart, and then the new chart that you want to upgrade to. And all your changes will
+
+70
+00:07:47.519 --> 00:07:54.160
+be lost since they don't exist in the old chart or the new chart. But Helm 3, as mentioned,
+
+71
+00:07:54.160 --> 00:07:59.359
+looks at the charts, and also at the live state, and it notices that you added some stuff of your
+
+72
+00:07:59.359 --> 00:08:05.679
+own. So it performs the upgrade while preserving anything that you might have added. Well,
+
+73
+00:08:05.679 --> 00:08:08.720
+that's all for this lecture, and I will see you in the next one.

@@ -1,0 +1,309 @@
+WEBVTT
+
+1
+00:00:00.720 --> 00:00:06.400
+Let's look at the different components of Helm. Helm has multiple components we'll be working
+
+2
+00:00:06.400 --> 00:00:12.160
+with. So let's take a look at its general structure, concepts, and the pieces we'll be working with.
+
+3
+00:00:13.200 --> 00:00:17.760
+So we have the Helm command line utility on our local system that we will be using to perform
+
+4
+00:00:17.760 --> 00:00:25.520
+Helm actions such as installing a chart, upgrading, rollback, etc. Charts are a collection of files,
+
+5
+00:00:25.520 --> 00:00:31.440
+and they contain all the instructions that Helm needs to know to be able to create the collection
+
+6
+00:00:31.440 --> 00:00:37.599
+of objects that you need in your Kubernetes cluster. By using charts, and adding the objects
+
+7
+00:00:37.599 --> 00:00:44.000
+according to these specific instructions in the charts, Helm in a way installs applications into
+
+8
+00:00:44.000 --> 00:00:51.840
+your cluster. When a chart is applied to your cluster, a release is created. A release is a
+
+9
+00:00:51.840 --> 00:00:57.919
+single installation of an application using a Helm chart. Within each release, you can have
+
+10
+00:00:57.919 --> 00:01:04.160
+multiple revisions. And each revision is like a snapshot of the application. Every time a change
+
+11
+00:01:04.160 --> 00:01:09.360
+is made to the application, such as an upgrade of the image or change of replicas or configuration
+
+12
+00:01:09.360 --> 00:01:16.320
+objects, a new revision is created. Now just like how we can find all kinds of images on Docker Hub
+
+13
+00:01:16.320 --> 00:01:23.279
+or Vagrant boxes on the Vagrant Cloud, if you're familiar with that, we can find Helm
+
+14
+00:01:23.279 --> 00:01:29.519
+charts in a public repository, we can easily download publicly available charts for various
+
+15
+00:01:29.519 --> 00:01:35.199
+applications. And these are readily available. And we can use them to deploy applications
+
+16
+00:01:35.199 --> 00:01:43.360
+on our cluster. And finally, to keep track of what it did in our cluster, such as the releases
+
+17
+00:01:43.360 --> 00:01:49.760
+that it installed, the charts used, revision states, and so on, Helm will need a place to save
+
+18
+00:01:49.760 --> 00:01:59.120
+this data. This data is known as metadata. And that is data about data. Now it wouldn't be too
+
+19
+00:01:59.120 --> 00:02:04.639
+useful if Helm would save this on our local computer. If another person would need to work
+
+20
+00:02:04.639 --> 00:02:10.880
+with our releases through Helm, they would need a copy of this data. So instead, Helm does the smart
+
+21
+00:02:10.880 --> 00:02:17.360
+thing and saves this metadata directly in our Kubernetes cluster as Kubernetes secrets.
+
+22
+00:02:17.360 --> 00:02:22.639
+This way, the data survives. And as long as the Kubernetes cluster survives, everyone from our
+
+23
+00:02:22.639 --> 00:02:28.559
+team can access it. So they can do Helm upgrades, or whatever it is that they want to do.
+
+24
+00:02:28.559 --> 00:02:33.279
+So Helm will always know about everything it did in this cluster. And we'll be able to keep track of every
+
+25
+00:02:33.279 --> 00:02:40.320
+action every step of the way, since it always has its metadata available. Now let's look at each of
+
+26
+00:02:40.320 --> 00:02:47.600
+these in a bit more detail. Charts are a collection of files. And they contain all the instructions
+
+27
+00:02:48.240 --> 00:02:53.039
+that Helm needs to know to be able to create the collection of objects that you need in your
+
+28
+00:02:53.039 --> 00:02:58.800
+Kubernetes cluster. By using these charts and adding the objects according to that specific
+
+29
+00:02:58.800 --> 00:03:05.279
+instructions is how as we discussed Helm installs applications into your cluster. Now I'll be using
+
+30
+00:03:05.360 --> 00:03:11.279
+two applications throughout this course to explain concepts. First is a simple HelloWorld
+
+31
+00:03:11.279 --> 00:03:17.279
+application, which is a simple Nginx based web server, and a service to expose it. And the other
+
+32
+00:03:17.279 --> 00:03:22.320
+would be a WordPress site, which is slightly more complex. Now the simple web server will help you
+
+33
+00:03:22.320 --> 00:03:27.440
+understand the concepts in the simplest form, the WordPress example will help you understand its
+
+34
+00:03:27.440 --> 00:03:32.399
+real life usage. For example, in this simple HelloWorld application, we have two objects,
+
+35
+00:03:32.399 --> 00:03:36.880
+a Deployment and a Service. And most of these you should be able to relate to what you learned in
+
+36
+00:03:36.880 --> 00:03:41.839
+the Kubernetes course, it's a standard Deployment object that deploys Pods of an image, and a
+
+37
+00:03:41.839 --> 00:03:48.800
+Service that exposes it as a NodePort Service, for instance. However, you might notice the image
+
+38
+00:03:48.800 --> 00:03:55.839
+name and replicas are specified in a different form. This is called templating. The values that
+
+39
+00:03:55.839 --> 00:04:02.960
+go here are part of another file called the values.yaml file. In a Helm chart, we'll often
+
+40
+00:04:02.960 --> 00:04:08.320
+be interacting with a special file. You see, most of the time, we won't need to build the charts
+
+41
+00:04:08.320 --> 00:04:13.039
+ourselves, we have hundreds of them already available to download in the public repository.
+
+42
+00:04:13.039 --> 00:04:19.519
+But what we'll almost always need to do, or want to do is configure the package that we install
+
+43
+00:04:19.519 --> 00:04:25.359
+through that chart. The values.yaml file is where the configurable values are stored. And most
+
+44
+00:04:25.359 --> 00:04:29.679
+of the time, this is the only file you'll have to modify to customize the deployment of the
+
+45
+00:04:29.679 --> 00:04:35.600
+application for your needs. This is like the settings file or the inputs file for the Helm
+
+46
+00:04:35.600 --> 00:04:42.160
+chart. The charts are way more complicated for a WordPress application with so many files and
+
+47
+00:04:42.160 --> 00:04:46.640
+very complex templating. And we will look more into templating and get into the details about
+
+48
+00:04:46.640 --> 00:04:52.000
+these charts later in this course. For now, we will stick with simple charts to understand
+
+49
+00:04:52.000 --> 00:04:59.440
+the basics. Now when a chart is applied to your cluster, a release is created. Now we could ask
+
+50
+00:04:59.440 --> 00:05:06.559
+ourselves why the need for an additional item? Why can't we just say we installed a chart to
+
+51
+00:05:06.559 --> 00:05:14.079
+Kubernetes in the command helm install my-site, Bitnami WordPress, we use the chart at Bitnami
+
+52
+00:05:14.079 --> 00:05:21.679
+WordPress, and named the release my-site. So why not just use a shorter command, like helm install
+
+53
+00:05:21.679 --> 00:05:27.359
+Bitnami WordPress and be done with it without specifying a release name. Well, one simple
+
+54
+00:05:27.359 --> 00:05:32.239
+reason why it makes more sense to have releases based on charts is that we can install multiple
+
+55
+00:05:32.239 --> 00:05:38.160
+releases based on the same chart. So we can launch a second WordPress website with a command such as
+
+56
+00:05:38.160 --> 00:05:44.720
+helm install my-second-site, Bitnami WordPress. And since there are two different releases,
+
+57
+00:05:44.720 --> 00:05:49.040
+they can be tracked separately and changed independently. Even though they're based on
+
+58
+00:05:49.040 --> 00:05:55.519
+the same chart as releases, they're two entirely different entities. Now this can be useful in a
+
+59
+00:05:55.519 --> 00:05:59.760
+lot of scenarios. For example, you can have a release for a WordPress website that your customers
+
+60
+00:05:59.760 --> 00:06:04.160
+use. And another release for a WordPress website that is only visible to your internal team of
+
+61
+00:06:04.160 --> 00:06:10.079
+developers. There they can experiment and add new features without breaking the main website.
+
+62
+00:06:10.079 --> 00:06:14.320
+And since the two releases are based on the same chart, once they get something working correctly
+
+63
+00:06:14.320 --> 00:06:19.200
+on the development side, they can transfer it to the main website since it should work exactly the
+
+64
+00:06:19.200 --> 00:06:27.679
+same way as the two websites are basically clones and built the same way. And we saw an example of
+
+65
+00:06:27.679 --> 00:06:32.720
+a very basic chart developed in Helm. And earlier, we saw an example of a chart to deploy a WordPress
+
+66
+00:06:32.720 --> 00:06:39.600
+application. And what if we want to deploy a new chart, say, for deploying Redis or Prometheus,
+
+67
+00:06:39.600 --> 00:06:45.600
+for instance, thousands of charts are readily available at different Helm repositories.
+
+68
+00:06:45.600 --> 00:06:50.880
+And across the world, there are different providers who are hosting Helm repositories, such as Apps
+
+69
+00:06:50.880 --> 00:06:58.239
+Code, community operators, TrueCharts, Bitnami, etc. And you don't have to go to each of these
+
+70
+00:06:58.239 --> 00:07:04.320
+repositories to search for charts. All of these repositories have listed their charts in a single
+
+71
+00:07:04.320 --> 00:07:15.119
+location known as the Helm Hub, or Artifact Hub, as it is also known now. So at artifacthub.io,
+
+72
+00:07:15.119 --> 00:07:20.799
+you'll find charts that you can use right away. As of this recording, there are over 6300 packages
+
+73
+00:07:21.359 --> 00:07:25.920
+available there. And you may search for the chart you're looking for, or browse through available
+
+74
+00:07:25.920 --> 00:07:30.480
+ones. And sometimes the charts are actually published by the actual developers of that
+
+75
+00:07:30.480 --> 00:07:36.559
+project. So you will see the official or verified publisher badges in such cases. And it's preferable
+
+76
+00:07:36.559 --> 00:07:42.640
+you use those when available. We'll see more about installing charts from repositories
+
+77
+00:07:42.640 --> 00:07:47.279
+in the upcoming videos and labs. Well, that's all for now. I'll see you in the next one.

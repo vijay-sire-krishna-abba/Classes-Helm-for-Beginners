@@ -1,0 +1,337 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:06.640
+Let's talk about packaging and uploading charts. We now have our charts built and ready to be
+
+2
+00:00:06.640 --> 00:00:15.040
+shared with the world. First, we package it, and then we upload it to the online chart repository
+
+3
+00:00:15.040 --> 00:00:21.760
+so other users can download and install them. So the chart we developed is in the nginx chart
+
+4
+00:00:21.760 --> 00:00:28.240
+directory with a Chart.yaml, values.yaml, README.md, and the license files and the templates and
+
+5
+00:00:28.240 --> 00:00:35.279
+chart directories. To package it, run the helm package command. And that's basically it.
+
+6
+00:00:36.560 --> 00:00:44.720
+This packages the chart into an archive format named nginx chart-0.1.0.tgz. The
+
+7
+00:00:44.720 --> 00:00:50.000
+version number 0.1.0 is picked from the version within the chart.yaml file.
+
+8
+00:00:50.720 --> 00:00:56.799
+The .tgz extension points out that this is a tar archive compressed with gzip.
+
+9
+00:00:57.840 --> 00:01:04.239
+We can open this up with almost any archive manager like, you know, WinRAR in Windows or
+
+10
+00:01:04.239 --> 00:01:10.800
+7-Zip or any other kind of archive utilities in Linux and so on. Inside, we'll see all the
+
+11
+00:01:10.800 --> 00:01:14.959
+files and directories that we added to this chart in our exercises neatly grouped together in a
+
+12
+00:01:14.959 --> 00:01:20.320
+single file that is much easier to move around. So we now have the packaged Helm chart and the
+
+13
+00:01:20.320 --> 00:01:26.959
+next step is to upload it to a chart repository. However, it is not recommended to just upload this
+
+14
+00:01:26.959 --> 00:01:32.800
+file as is, we must also consider signing it to make sure users know that the package they are
+
+15
+00:01:32.800 --> 00:01:39.440
+downloading is legit. Whenever we download stuff from the internet, it's not 100% guaranteed that
+
+16
+00:01:39.440 --> 00:01:44.639
+what we get is actually what the developer or maintainer uploaded. That's because servers can
+
+17
+00:01:44.720 --> 00:01:49.760
+be hacked and files can be replaced with malicious content. And one of the ways to make downloads
+
+18
+00:01:49.760 --> 00:01:55.680
+safer is to cryptographically sign files and packages. For example, in this case, we built
+
+19
+00:01:55.680 --> 00:02:00.959
+our chart, we know our content is good and safe to use. But how can the users that download our
+
+20
+00:02:00.959 --> 00:02:06.720
+chart be sure that they get exactly what we built for them, and not some malicious file uploaded by
+
+21
+00:02:06.720 --> 00:02:14.720
+some hacker? Helm provenance and integrity to the rescue. Once again, Helm provides us with the
+
+22
+00:02:14.720 --> 00:02:22.320
+necessary tools to fix this. Helm uses a private key that only we, the chart developers, have access
+
+23
+00:02:22.320 --> 00:02:27.600
+to. And with this key, it produces a digital signature and adds it to what is called a
+
+24
+00:02:27.600 --> 00:02:35.600
+provenance file. We'll look at that in a bit. Now users download our chart and provenance file and
+
+25
+00:02:35.600 --> 00:02:41.199
+look for the signature with a public key that they know belongs to us, they can verify if the
+
+26
+00:02:41.199 --> 00:02:46.320
+chart is correctly signed. If the signature is valid, they know that this chart was manually
+
+27
+00:02:46.320 --> 00:02:53.839
+signed by us, the chart developers. First, we'll need the private key. And we can generate this
+
+28
+00:02:53.839 --> 00:03:00.960
+private key and public key pair with the GNU Privacy Guard or GPG utility included by default
+
+29
+00:03:00.960 --> 00:03:05.919
+in most Linux distributions. And for this purpose of our exercise, we'll choose the quickest method
+
+30
+00:03:05.919 --> 00:03:12.000
+to generate these files with the command GPG quick-generate-key followed by a name, let's call it
+
+31
+00:03:12.000 --> 00:03:17.199
+John Smith. If you get a prompt to password protect this, you can just use an empty password
+
+32
+00:03:17.199 --> 00:03:22.080
+for the sake of simplicity for now. But in a real-world scenario, it's recommended that you use a
+
+33
+00:03:22.080 --> 00:03:28.000
+strong password to protect your private key. It'll be encrypted with this password. And even if someone
+
+34
+00:03:28.000 --> 00:03:33.759
+somehow steals your file, they can't use it without the correct password. Now when the keys
+
+35
+00:03:33.759 --> 00:03:39.039
+have been generated, we'll see an output similar to this. And the pub section at the bottom shows
+
+36
+00:03:39.039 --> 00:03:45.679
+us the unique identifier of our public key. This could be uploaded to an open PGP key server, like
+
+37
+00:03:46.399 --> 00:03:51.679
+keyserver.ubuntu.com or something and users would be able to download it by using this unique
+
+38
+00:03:51.679 --> 00:03:57.520
+identifier, and then verify our signatures. Now, just so you know, in a production environment,
+
+39
+00:03:57.520 --> 00:04:03.199
+you should use another command to generate your keys and something like the GPG full-generate-key
+
+40
+00:04:03.199 --> 00:04:07.679
+would be better since it asks you for more details. And you can fine-tune cryptographic
+
+41
+00:04:07.679 --> 00:04:12.320
+settings, expiration dates, set an email address associated with the key and so on.
+
+42
+00:04:14.240 --> 00:04:22.079
+Most Linux distributions nowadays use GNU PG v2, which stores keys in a different format than the
+
+43
+00:04:22.079 --> 00:04:29.519
+previous version. To sign charts Helm currently prefers the older format, we can convert the new
+
+44
+00:04:29.519 --> 00:04:36.959
+secret keyring format to the old format and store it in a file called secring.gpg with the
+
+45
+00:04:36.959 --> 00:04:44.399
+following command. GPG export secret keys, and then redirected to secret.gpg file.
+
+46
+00:04:44.799 --> 00:04:50.799
+Now that we have the key ready, we package it again using the same helm package command,
+
+47
+00:04:51.600 --> 00:04:56.880
+but with the sign option and by passing in the key that we created in the previous step,
+
+48
+00:04:57.839 --> 00:05:02.480
+the key parameter expects to receive either the full name that we associated with our key
+
+49
+00:05:02.480 --> 00:05:08.000
+or the email address. If we ever forget these details, we can list key details with the command
+
+50
+00:05:08.239 --> 00:05:16.239
+GPG list keys like this. Now previously, when we packaged our chart without signing it,
+
+51
+00:05:16.239 --> 00:05:23.679
+the nginx chart.tgz file was generated. But also signing an additional file is generated
+
+52
+00:05:23.679 --> 00:05:29.440
+called the provenance file. In our case, this will be stored in the nginx.tgz.
+
+53
+00:05:30.079 --> 00:05:37.920
+PROV extension. If you look inside this file, its contents look similar to this. Now this
+
+54
+00:05:37.920 --> 00:05:45.119
+file basically tells us that the file nginx chart-0.1.0.tgz should have this exact
+
+55
+00:05:46.000 --> 00:05:53.920
+sha256 hash. So if we run the sha256sum with this file, we'll see that indeed this hash
+
+56
+00:05:53.920 --> 00:06:01.119
+is an exact match. So if we change even one byte in the whole file, the hash would change entirely.
+
+57
+00:06:01.119 --> 00:06:06.880
+So this tells us that this file is exactly the one that the provenance file tells us we should
+
+58
+00:06:06.880 --> 00:06:11.760
+have. But the provenance file has been downloaded from the internet too. So maybe a hacker just
+
+59
+00:06:11.760 --> 00:06:17.279
+generated a corrupted nginx dot TGC file, and then edited the provenance and then switching
+
+60
+00:06:17.279 --> 00:06:24.239
+the hash of the genuine file with the hash of their corrupted file. However, the BEGIN PGP
+
+61
+00:06:24.239 --> 00:06:29.600
+signature section at the top is where the real magic happens. This is a signature for the entire
+
+62
+00:06:29.600 --> 00:06:35.359
+provenance file saying something like this. I John Smith, the owner of public key, so and so
+
+63
+00:06:35.359 --> 00:06:40.640
+have signed the entire contents of this file. And you can rest assured that the hash you see here
+
+64
+00:06:40.640 --> 00:06:45.760
+is the correct one. If you can verify the signature with my public key, and it is valid.
+
+65
+00:06:45.760 --> 00:06:50.480
+So now the hash in the file cannot be changed as that would invalidate the signature,
+
+66
+00:06:50.480 --> 00:06:54.959
+and the attacker cannot produce a signature that could be verified with your public key.
+
+67
+00:06:56.160 --> 00:07:00.640
+So when uploading your chart to some online repository, you should copy both the TGC
+
+68
+00:07:00.640 --> 00:07:05.600
+chart archive and also the TGC.prov.provenance file. And we'll see how to do that
+
+69
+00:07:05.600 --> 00:07:11.920
+in the next lesson. So when users have both of these files available, they can verify the
+
+70
+00:07:11.920 --> 00:07:20.559
+integrity of the chart with the helm verify command with GPG v2. This will also complain
+
+71
+00:07:20.559 --> 00:07:28.079
+because the newer GPG tool stores public keys in the newer format in the pubring.kbx file
+
+72
+00:07:28.079 --> 00:07:34.320
+instead of the older pubring.gpg file that helm expects. So as a quick workaround, just so
+
+73
+00:07:34.320 --> 00:07:39.519
+we're able to see how verify in action we can do this, we export our public key to a file called
+
+74
+00:07:40.399 --> 00:07:46.239
+my public key, and then use helm verify command again, but also point helm to the location of
+
+75
+00:07:46.239 --> 00:07:52.000
+the public key that can be used to verify the signature. In a real scenario, our chart users
+
+76
+00:07:52.000 --> 00:07:57.040
+would first download our public key with a command like this. And only afterwards, they'd be able to
+
+77
+00:07:57.040 --> 00:08:02.160
+use a helm verify command. So this assumes that we first uploaded our public key to the keyserver
+
+78
+00:08:02.160 --> 00:08:08.320
+dot ubuntu.com key server. Now the verification phase can also be integrated into regular helm
+
+79
+00:08:08.320 --> 00:08:13.600
+commands that we use so far, for example, to verify when we download a chart from the internet,
+
+80
+00:08:13.600 --> 00:08:18.399
+or when installing a chart, we just add the --verify parameter to our commands.
+
+81
+00:08:18.399 --> 00:08:21.440
+Now, of course, if the verification of signature fails,
+
+82
+00:08:21.440 --> 00:08:26.480
+the install phase is abandoned. So we don't install charts that we can't trust.
+
+83
+00:08:28.959 --> 00:08:34.960
+Well, that's all for now about packaging and signing charts. And in the next video,
+
+84
+00:08:34.960 --> 00:08:37.039
+we'll talk about uploading charts.

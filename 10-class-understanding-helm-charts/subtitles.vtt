@@ -1,0 +1,13 @@
+WEBVTT
+
+1
+00:00:00.640 --> 00:00:07.760
+In this section, we will talk more about Helm charts. Now we will see how we can write our
+
+2
+00:00:07.760 --> 00:00:13.920
+own Helm charts, how templating and functions work, we'll look at what are chart hooks,
+
+3
+00:00:13.920 --> 00:00:19.360
+tests and finally Helm provenance and integrity. So let's get started.

@@ -1,0 +1,65 @@
+WEBVTT
+
+1
+00:00:00.240 --> 00:00:02.480
+Let us now look at pipelines.
+
+2
+00:00:04.560 --> 00:00:10.160
+In the Linux world, when you run this echo command, it prints the string that you pass in
+
+3
+00:00:10.160 --> 00:00:16.879
+as a parameter as output on the screen. However, we want to take the output of this command and
+
+4
+00:00:16.879 --> 00:00:23.680
+then process it in some way. In another command, we use pipes or pipelines. In this example,
+
+5
+00:00:23.680 --> 00:00:29.680
+the output of the first command echo is passed through as input to the translate command,
+
+6
+00:00:30.320 --> 00:00:36.959
+using a pipe where all characters from lowercase A to Z are translated to the capital case.
+
+7
+00:00:38.480 --> 00:00:44.000
+We have seen Functions in Helm, we write the function name before the variable names like this.
+
+8
+00:00:45.040 --> 00:00:51.599
+But another way to write this and one that you will see most commonly used is using Pipelines.
+
+9
+00:00:52.240 --> 00:01:00.160
+So this can also be written by moving the function name to the end and using a pipe like this. Both
+
+10
+00:01:00.160 --> 00:01:07.120
+of these will result in the same output. With pipelines, you can now pipe multiple functions
+
+11
+00:01:07.120 --> 00:01:13.120
+one after the other. For example, you can pipe the output of the upper function as input to the
+
+12
+00:01:13.120 --> 00:01:22.000
+code function. This adds a quote around the output of the uppercase function. And you could
+
+13
+00:01:22.000 --> 00:01:29.440
+then pipe that output to the input of a shuffle function. And that shuffles the output. So now
+
+14
+00:01:30.639 --> 00:01:37.839
+the nginx word is first converted to uppercase. And then quotes are added around it. And then
+
+15
+00:01:37.839 --> 00:01:44.000
+finally, it is shuffled. Well, that's all for now. Head over to the labs and practice working
+
+16
+00:01:44.000 --> 00:01:47.199
+with functions and pipelines and I will see you in the next one.

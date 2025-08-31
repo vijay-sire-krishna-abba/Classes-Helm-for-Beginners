@@ -1,0 +1,125 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:08.600
+Let's now talk about loops and ranges. In the programming world, a loop such as a for loop
+
+2
+00:00:08.600 --> 00:00:14.600
+is one that executes the same lines of code within its block multiple times by iterating
+
+3
+00:00:14.600 --> 00:00:21.480
+through a set of data that it has to work with. In this case, the data to work with is one to ten.
+
+4
+00:00:21.480 --> 00:00:30.480
+And with each iteration of the loop, the value of i iterates from one to 10. And the print
+
+5
+00:00:30.480 --> 00:00:38.639
+statement runs 10 times, resulting in printing the values from one to 10. So that's how a basic
+
+6
+00:00:38.639 --> 00:00:48.680
+loop works. We have a list of regions in the values.yaml file like this. So our goal is
+
+7
+00:00:48.680 --> 00:00:59.000
+to create a config map template with the list of regions automatically populated in this format.
+
+8
+00:00:59.000 --> 00:01:05.400
+So how do we achieve this? So we create a basic structure for the config map. And this is how
+
+9
+00:01:05.400 --> 00:01:10.879
+it looks. This is a very basic structure of the config map, it has a region section, but there's
+
+10
+00:01:10.879 --> 00:01:17.000
+nothing under the region section. And all that is doing is adding the name called region info
+
+11
+00:01:17.120 --> 00:01:24.000
+with the release name in it. And this template file is going to create an output like this with
+
+12
+00:01:24.000 --> 00:01:32.599
+simply the release name replaced. Now we need to look into the regions part and make sure we list
+
+13
+00:01:32.599 --> 00:01:41.000
+the regions under it in the form of a list or an array with each region inside a quote.
+
+14
+00:01:41.000 --> 00:01:46.919
+Okay, so that's that's our requirement. So we need to iterate through the list in the values or YAML
+
+15
+00:01:46.919 --> 00:01:53.879
+file. So for that, we need a loop. So we create a for loop using the range operator, we specify
+
+16
+00:01:53.879 --> 00:02:02.519
+the list regions from the values file, and we add the end block. Now this creates a block with a
+
+17
+00:02:02.519 --> 00:02:09.320
+loop, everything that we specify inside, this will be repeated each time the loop iterates. But what
+
+18
+00:02:09.320 --> 00:02:19.160
+do we put inside this? Now we know that we need a dash first. So we put a dash as is. And then we
+
+19
+00:02:19.160 --> 00:02:25.679
+need the region. So how do we get the region within this range block? So here's a graphical
+
+20
+00:02:25.679 --> 00:02:34.160
+representation of the scope of the data in the values file, we have the dollar or root at the
+
+21
+00:02:34.160 --> 00:02:41.399
+top. And we have values under it and then regions and then a list of strings. So just like the with
+
+22
+00:02:41.399 --> 00:02:48.800
+block, the range block sets the scope each time it iterates through the list. As such, the current
+
+23
+00:02:48.800 --> 00:02:56.800
+scope, that is the dot refers to the value of the object in that list, which happens to be Ohio in
+
+24
+00:02:57.440 --> 00:03:06.759
+the first time. So all we need to do to refer to the value is to just say dot, and that's it. So
+
+25
+00:03:06.759 --> 00:03:13.320
+each time it iterates through the range block, the next value is traversed, and the scope is set to
+
+26
+00:03:13.320 --> 00:03:21.240
+that value. So this gives us the desired results, or almost the desired results, except that it
+
+27
+00:03:21.240 --> 00:03:27.039
+doesn't add the quotes. So if you compare the expected results versus the current result,
+
+28
+00:03:27.039 --> 00:03:35.360
+you'll see that it's generated the array as expected, but it's missing the quotes. For this,
+
+29
+00:03:35.360 --> 00:03:45.320
+all we have to do is simply pipe the dot to the quotes function like this. And so and that's it.
+
+30
+00:03:45.320 --> 00:03:49.360
+So you can consider the dot just as any other object, and then we can pipe it through any
+
+31
+00:03:49.360 --> 00:03:54.960
+function that we want. Well, that's all for now. I'll see you in the next one.

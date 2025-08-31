@@ -1,0 +1,181 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:08.520
+Let's now talk about conditionals. So here we have a simple service.yaml file, part of the template
+
+2
+00:00:08.520 --> 00:00:16.680
+of our chart. And we have a values file that has some default values set. We're planning to add
+
+3
+00:00:16.680 --> 00:00:23.480
+some custom labels that help group objects based on organization. So we add a label section. However,
+
+4
+00:00:23.480 --> 00:00:29.000
+this could be different for different releases. So we create a property under values.yaml,
+
+5
+00:00:29.000 --> 00:00:39.160
+and templatize it. Now that works fine. However, this value is optional. So we don't want to add
+
+6
+00:00:39.160 --> 00:00:46.160
+the org label, or these lines if this value was not specified in the values.yaml file. So we
+
+7
+00:00:46.160 --> 00:00:52.000
+want to conditionally add these lines depending upon whether the variable was defined or not. In
+
+8
+00:00:52.000 --> 00:00:57.840
+the programming world, we use if statements for conditional blocks. So here's a simple program
+
+9
+00:00:57.840 --> 00:01:05.279
+that prints a variable called org_label. If we want to conditionally run the print statement,
+
+10
+00:01:05.279 --> 00:01:11.320
+only if the variable is set, then we encapsulate the print statement within an if conditional block.
+
+11
+00:01:11.320 --> 00:01:20.480
+This way, only if the variable or label is set, the print statement runs. Similarly, in Helm charts,
+
+12
+00:01:20.480 --> 00:01:27.400
+we can encapsulate the lines that we want to be available in an if conditional block, only if the
+
+13
+00:01:27.440 --> 00:01:34.239
+org label value is defined. The if conditional block is similar to any scripting or programming
+
+14
+00:01:34.239 --> 00:01:40.160
+languages that you may be familiar with. The only exception is that it is also within the curly braces
+
+15
+00:01:40.160 --> 00:01:47.519
+as it's part of the templating language. So this gives us this YAML file with the org labels set
+
+16
+00:01:47.519 --> 00:01:56.400
+as expected. If the org label value is not set in the values.yaml file, then this won't be
+
+17
+00:01:56.400 --> 00:02:03.519
+available in the output file either. Okay, so let's add it back. And let's look at the conditional
+
+18
+00:02:03.519 --> 00:02:11.240
+statements in a bit more detail. As you can see, there are two empty lines in the generated file.
+
+19
+00:02:11.240 --> 00:02:17.559
+This is because when the template is converted to a manifest file, everything between the curly
+
+20
+00:02:17.559 --> 00:02:25.960
+braces are removed. However, there are still white spaces left on those lines before the curly braces
+
+21
+00:02:26.039 --> 00:02:33.839
+start. As such, they continue to be available on the generated files as well. There are ways to get
+
+22
+00:02:33.839 --> 00:02:41.080
+rid of white spaces. In this case, since the white spaces are before the template directive starts or
+
+23
+00:02:41.080 --> 00:02:47.960
+near to the beginning of the curly braces, we can add a dash right after the curly braces to indicate
+
+24
+00:02:47.960 --> 00:02:55.080
+Helm to trim those out when the files are generated. And note that the dash should be right after the
+
+25
+00:02:55.520 --> 00:03:02.199
+second curly brace. And also there should be a space between the dash and anything that comes
+
+26
+00:03:02.199 --> 00:03:12.080
+after it. This way, the extra spaces are gone. And so are those extra lines. So back to our programming
+
+27
+00:03:12.080 --> 00:03:20.559
+language example, if there is an if statement, then we know that there is an else statement as
+
+28
+00:03:20.559 --> 00:03:27.360
+well. And if there is an if and else statement, then there has to be an else if statement as
+
+29
+00:03:27.360 --> 00:03:34.639
+well. So we have if else if and else statements in if conditional blocks. And similarly, we can
+
+30
+00:03:34.639 --> 00:03:43.639
+have else if and else statements within conditional blocks in Helm charts like this. Note that the
+
+31
+00:03:43.759 --> 00:03:51.559
+equality is checked using the EQ function like this. So EQ is a function that takes two arguments
+
+32
+00:03:51.559 --> 00:03:58.000
+and returns true if they are equal. In this case, it takes the value of the org label variable and
+
+33
+00:03:58.000 --> 00:04:08.080
+the text HR for comparison. There are many other functions as well, such as the NE for not equal
+
+34
+00:04:08.080 --> 00:04:16.640
+LT for less than LE for less than or equal to GT for greater than G for greater than or equal to NOT
+
+35
+00:04:16.640 --> 00:04:26.079
+for negation, and EMPTY, which is where the value is empty. So you don't usually use the equal to
+
+36
+00:04:26.079 --> 00:04:35.559
+operators to check comparison. Instead, you use functions for everything. Now, one of the common
+
+37
+00:04:35.559 --> 00:04:41.920
+examples or use cases where you will see conditionals used a lot is whether to create objects
+
+38
+00:04:41.920 --> 00:04:48.200
+of certain kinds or not. For example, here I have a service account template file as part of
+
+39
+00:04:48.200 --> 00:04:56.359
+the templates of our chart, among the many other template files that are available.
+
+40
+00:04:56.359 --> 00:05:02.600
+However, I don't always want this to be created, I want to provide an option for the user to customize the
+
+41
+00:05:02.600 --> 00:05:08.079
+creation of the service account based on a setting in the values.yaml file. So I add a section
+
+42
+00:05:08.079 --> 00:05:14.359
+called service account with a field create set to true. And I only want to create the service account
+
+43
+00:05:14.359 --> 00:05:20.679
+if this field is set to true. So we add a conditional block around the entire template file
+
+44
+00:05:20.679 --> 00:05:29.760
+to only be created if this value is set to true in the YAML file. Well, that's all for now.
+
+45
+00:05:29.760 --> 00:05:31.399
+I will see you in the next one.

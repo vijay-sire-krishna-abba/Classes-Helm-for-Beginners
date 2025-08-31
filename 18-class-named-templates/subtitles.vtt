@@ -1,0 +1,205 @@
+WEBVTT
+
+1
+00:00:00.640 --> 00:00:02.800
+Let's talk about named templates.
+
+2
+00:00:05.520 --> 00:00:12.000
+Let's look at this deployment file. So here we have a bunch of labels defined. And they're all
+
+3
+00:00:12.720 --> 00:00:18.559
+the same lines that are repeated multiple times throughout this file. And these may also be
+
+4
+00:00:18.559 --> 00:00:25.840
+present in other objects. For example, this service file, these are very repetitive. And for now,
+
+5
+00:00:25.840 --> 00:00:30.559
+these are only a few and it might be easy to write. However, when there are many lines such
+
+6
+00:00:30.559 --> 00:00:36.480
+as these, repeating things can get complicated. And we might mix things up and get them wrong.
+
+7
+00:00:37.040 --> 00:00:43.759
+So how do we ensure that it's the same lines used everywhere? How can we be consistent and reuse
+
+8
+00:00:43.759 --> 00:00:51.919
+code and remove duplication, we can remove the repeating lines to what is called a partial or
+
+9
+00:00:51.919 --> 00:00:59.200
+named template. Let's start with the service file for now. We move the repeating lines to a file
+
+10
+00:00:59.200 --> 00:01:06.080
+called _helpers.tpl. Now the underscore in the file name tells Helm not to
+
+11
+00:01:06.080 --> 00:01:11.360
+consider this file as a usual template file. Because when we run the helm create command,
+
+12
+00:01:11.360 --> 00:01:17.440
+Helm reads all the files in the templates directory and converts them to Kubernetes manifests. In this
+
+13
+00:01:17.440 --> 00:01:23.440
+case, this is only a helper file. And we don't want this file to end up as a Kubernetes manifest
+
+14
+00:01:23.440 --> 00:01:30.320
+file, because it's going to be invalid. So all files starting with an underscore are skipped
+
+15
+00:01:30.320 --> 00:01:37.279
+from being created or converted into a Kubernetes manifest file. You can then give these lines
+
+16
+00:01:37.279 --> 00:01:43.919
+or this template a name using the define statement like this. Now here, we name these lines
+
+17
+00:01:43.919 --> 00:01:51.120
+labels because these are labels. Now these lines can now be imported, or rather included
+
+18
+00:01:51.120 --> 00:01:58.320
+anywhere we want using a simple template statement like this. To the template statement,
+
+19
+00:01:58.320 --> 00:02:05.680
+you tell what helper template you'd like to use, we named it labels. This is called a named
+
+20
+00:02:05.680 --> 00:02:13.360
+template. Now that works as expected and generates a file like this. Now if you look at the labels,
+
+21
+00:02:13.360 --> 00:02:21.360
+we have defined in the helpers file, they have the release name hard coded. Now we know that
+
+22
+00:02:21.360 --> 00:02:27.360
+that's going to create an issue when we install multiple releases. What if we had a template
+
+23
+00:02:27.360 --> 00:02:34.399
+directive within the helper file like this. So instead of hard coding the name, we add a template
+
+24
+00:02:34.399 --> 00:02:40.160
+directive .Release.Name, and we expect it to be replaced by the actual release name.
+
+25
+00:02:40.160 --> 00:02:46.479
+And doing that, in fact, gives a result like this, where it takes out the expected
+
+26
+00:02:46.479 --> 00:02:53.839
+release name. Now why is that? Remember, we talked about scope earlier, the scope is with
+
+27
+00:02:53.839 --> 00:02:59.600
+in the template file and does not get transferred to the helper file. So the helper
+
+28
+00:02:59.600 --> 00:03:04.880
+file has no data to work with. To transfer the current scope to the template file,
+
+29
+00:03:05.520 --> 00:03:09.360
+add a dot to the end of the template statement, like this.
+
+30
+00:03:11.679 --> 00:03:18.639
+dot, as we learned refers to the current scope, and it is then accessible from within the helper
+
+31
+00:03:18.639 --> 00:03:27.199
+file. Now, when you move lines of code to templates, remember that you must have the same
+
+32
+00:03:27.759 --> 00:03:33.600
+indentation or the number of spaces before these lines as you'd expect it to have in the actual
+
+33
+00:03:33.600 --> 00:03:39.679
+output file. This is because when the template statement adds the lines defined in the template,
+
+34
+00:03:39.679 --> 00:03:47.440
+it simply adds them there as is. So let us now see how this plays out with the deployment file.
+
+35
+00:03:50.960 --> 00:03:57.279
+Now in the deployment.yaml file, there are multiple places where the template has to be used.
+
+36
+00:03:57.279 --> 00:04:03.039
+So we replace all of them with the template statement that we used before. However,
+
+37
+00:04:04.160 --> 00:04:12.800
+when the file is generated, it is not formatted as expected. The template statement added the
+
+38
+00:04:12.800 --> 00:04:19.040
+lines from the helper file. However, it added the same indentation for all the instances,
+
+39
+00:04:19.040 --> 00:04:26.320
+and is resulting in a file that's not formatted correctly. It works as expected with the first
+
+40
+00:04:26.320 --> 00:04:32.640
+instance, because we had added the correct indentation for the first one. However, the later
+
+41
+00:04:32.640 --> 00:04:41.279
+ones, or the second and the third instances aren't indented correctly. Now there is a function that
+
+42
+00:04:41.279 --> 00:04:51.600
+helps fix the indentation. Guess what it's called indent. So to fix the first error, we must indent
+
+43
+00:04:51.600 --> 00:04:59.600
+the lines by an additional two spaces. And to fix the second error, we must indent the lines by
+
+44
+00:04:59.600 --> 00:05:07.359
+an additional four spaces. So here we are piping the output of the template statement to the indent
+
+45
+00:05:07.359 --> 00:05:15.519
+function. However, there's a small problem. This won't work because template is not a function,
+
+46
+00:05:15.519 --> 00:05:22.239
+it is an action. And like functions, you can't pipe its output to another function.
+
+47
+00:05:22.239 --> 00:05:27.920
+So what's shown here doesn't really work. So another function that does the same job as
+
+48
+00:05:27.920 --> 00:05:35.440
+the template is the include function, it can import named templates, and also pipe it to another
+
+49
+00:05:35.440 --> 00:05:42.399
+function. So replacing the template function with the include statements now helps in adding
+
+50
+00:05:42.399 --> 00:05:51.200
+the right indentation to these lines. Well, that's all about templates and functions,
+
+51
+00:05:51.200 --> 00:05:53.279
+and I'll see you in the next one.

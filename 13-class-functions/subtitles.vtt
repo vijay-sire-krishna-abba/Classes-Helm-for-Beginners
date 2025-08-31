@@ -1,0 +1,221 @@
+WEBVTT
+
+1
+00:00:00.240 --> 00:00:09.440
+We now look at functions in Helm. So we saw how a template and the values.yaml file together
+
+2
+00:00:09.440 --> 00:00:16.639
+create a valid manifest file. Now what if the values.yaml file didn't have a field set,
+
+3
+00:00:17.360 --> 00:00:23.760
+that will create a file without that field, the output file, of course, will also not have that
+
+4
+00:00:23.760 --> 00:00:28.959
+field. So say for example, the repository name isn't set. So this would result in the resulting
+
+5
+00:00:28.959 --> 00:00:35.599
+manifest file being created without this value. And that in turn would result in the pod failing
+
+6
+00:00:35.599 --> 00:00:44.240
+to be created. So what we need here is a simple way for our chart to have some default values
+
+7
+00:00:44.240 --> 00:00:50.639
+that it can fall back on in case the users don't provide anything in their values.yaml file.
+
+8
+00:00:50.639 --> 00:00:58.000
+So the logic would be if the user provided something in the values or YAML file, then use
+
+9
+00:00:58.000 --> 00:01:05.680
+that if there wasn't a value provided, then use this default value, like nginx, which and we can
+
+10
+00:01:05.680 --> 00:01:12.879
+do such a thing using functions. So what are functions? What do we know about functions
+
+11
+00:01:12.879 --> 00:01:18.400
+already? And we've heard about functions in the programming world. Say for example, we have a
+
+12
+00:01:18.400 --> 00:01:24.480
+string called Helm, and we want to convert it to uppercase. In the programming world, we have
+
+13
+00:01:24.480 --> 00:01:29.760
+functions available for it, such as the upper function. And we call upper function and pass
+
+14
+00:01:29.760 --> 00:01:36.080
+in this string as a parameter for an argument and we get the string in all uppercase. Similarly,
+
+15
+00:01:36.080 --> 00:01:42.800
+let's say we have another string with some spaces in the beginning and at the end. And how do we
+
+16
+00:01:42.800 --> 00:01:49.279
+remove those extra spaces for that we call the trim function and that removes the extra spaces.
+
+17
+00:01:50.239 --> 00:01:57.199
+So a function takes in an input such as the string Helm in this example, and processes it and gives
+
+18
+00:01:57.199 --> 00:02:05.279
+us an output in the desired format. In this case, it helps transform data from one format to another.
+
+19
+00:02:05.279 --> 00:02:14.160
+So what's it got to do with Helm? If you've been discussing how Helm uses the files available under
+
+20
+00:02:14.160 --> 00:02:19.279
+the templates directory and combines them with the information available in the release, the
+
+21
+00:02:19.279 --> 00:02:24.080
+values.yaml file, and the chart details to create the final version of the manifest files on
+
+22
+00:02:24.080 --> 00:02:29.520
+Kubernetes. So the template directory values.image.repository gets translated into the
+
+23
+00:02:29.520 --> 00:02:36.880
+value from the values.yaml file, which happens to be nginx. So in this lecture, we will focus
+
+24
+00:02:36.880 --> 00:02:43.759
+purely on what's within the template directive. Now within the double curly brackets, as with
+
+25
+00:02:43.759 --> 00:02:49.600
+programming languages, functions in Helm help transform data from one format to another. Say
+
+26
+00:02:49.600 --> 00:02:56.639
+for example, we would like to convert nginx into uppercase without changing the value defined in
+
+27
+00:02:56.639 --> 00:03:04.320
+the values.yaml file, we could call the upper function in the template directive by adding the
+
+28
+00:03:04.320 --> 00:03:13.520
+name of the function upper like this before we provide the repository name. And that converts
+
+29
+00:03:13.520 --> 00:03:20.800
+the value to uppercase in the generated manifest file. Now in this case, upper is the function name
+
+30
+00:03:20.800 --> 00:03:28.479
+and values.image.repository is the argument. This function has one argument.
+
+31
+00:03:28.479 --> 00:03:35.520
+Another example would be to add a quote around the text. For this, use the quote function. And
+
+32
+00:03:35.520 --> 00:03:41.679
+this adds a quote around the text nginx in the generated manifest file. The replace function
+
+33
+00:03:41.679 --> 00:03:48.160
+replaces a character with another, in this case replaces x with a y. And note that in this case,
+
+34
+00:03:48.160 --> 00:03:54.559
+the replace function takes additional arguments, x is the string to look for and y is the string
+
+35
+00:03:54.559 --> 00:04:01.520
+to replace it with. So this function has a total of three arguments, the details about arguments,
+
+36
+00:04:02.240 --> 00:04:07.759
+a function takes can be found in the Helm documentation pages. So make sure to always
+
+37
+00:04:07.759 --> 00:04:12.800
+refer to that while working with each function. Another example is to shuffle the characters
+
+38
+00:04:12.800 --> 00:04:17.920
+using the shuffle function. Now, of course, you wouldn't want to use these functions with image
+
+39
+00:04:17.920 --> 00:04:23.679
+names, because after all, you don't want to shuffle an image name. And these are just examples. And
+
+40
+00:04:23.679 --> 00:04:29.760
+these are just a few of the many string functions available in Helm, a comprehensive list can be
+
+41
+00:04:29.760 --> 00:04:36.079
+found in the documentation pages. And you'll work with some of these in the upcoming labs. So what
+
+42
+00:04:36.079 --> 00:04:42.559
+we just saw are string functions. Apart from those, there are other types of functions such as
+
+43
+00:04:43.200 --> 00:04:48.880
+cryptographic or security-related functions for working with dates, dictionaries or less
+
+44
+00:04:49.519 --> 00:04:55.519
+Kubernetes-related functions, network-related functions, type conversion, regex, URL, etc.
+
+45
+00:04:55.519 --> 00:05:02.480
+A full list of supported functions can be found in the Helm documentation pages that are available
+
+46
+00:05:02.480 --> 00:05:09.359
+at this URL. So back to our problem of adding a default value for the image, if it's not specified,
+
+47
+00:05:09.359 --> 00:05:13.519
+as we discussed, if the value is not passed through the command line, or is not present in
+
+48
+00:05:13.519 --> 00:05:19.279
+the values.yaml file, then it won't be present in the generated manifest file as well.
+
+49
+00:05:21.760 --> 00:05:26.160
+We can add a function called default before the image repository variable,
+
+50
+00:05:26.799 --> 00:05:34.959
+and specify a default value of nginx. Note that the value always has to be within a quote.
+
+51
+00:05:34.959 --> 00:05:41.359
+So anything that's not in quotes, is considered a variable. And so it might complain that NGINX
+
+52
+00:05:41.359 --> 00:05:46.399
+is not available. So in this case, where since NGINX is the string that which has to be the
+
+53
+00:05:46.399 --> 00:05:51.679
+default value, we put it in quotes. So this function will result in the resulting deployment
+
+54
+00:05:52.399 --> 00:05:59.600
+file to always have a default image name of NGINX. Well, that's all for now. I will see you in the
+
+55
+00:05:59.600 --> 00:06:02.799
+next one.

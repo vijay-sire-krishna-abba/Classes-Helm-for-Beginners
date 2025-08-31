@@ -1,0 +1,461 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:08.480
+Let's start with writing our own Helm charts first. Helm charts are incredibly versatile,
+
+2
+00:00:08.480 --> 00:00:12.880
+and they can automate almost any kind of Kubernetes package installation that we can
+
+3
+00:00:12.880 --> 00:00:18.639
+think of. In a way, they're similar to installation wizards on operating systems.
+
+4
+00:00:18.639 --> 00:00:24.240
+And installation wizard, besides extracting the application files and directories can also add
+
+5
+00:00:24.240 --> 00:00:28.799
+relevant shortcuts to the desktop configure the application to launch when the operating system
+
+6
+00:00:28.799 --> 00:00:35.759
+starts up, install additional libraries that are needed and so on. The same is true for Helm Charts.
+
+7
+00:00:35.759 --> 00:00:42.080
+Although charts are technically not programs, they can act like programs. Besides just installing
+
+8
+00:00:42.080 --> 00:00:48.880
+various Kubernetes objects to get our app up and running, they can do some extra stuff too.
+
+9
+00:00:48.880 --> 00:00:53.439
+For example, we can write the chart in such a way that whenever we do a Helm upgrade,
+
+10
+00:00:53.439 --> 00:00:59.439
+a database can be automatically backed up before that happens. So we have a way to restore
+
+11
+00:01:00.160 --> 00:01:06.639
+data from backup in case something goes wrong. And that's just one small example. We will look at
+
+12
+00:01:06.639 --> 00:01:12.720
+those kinds of complex setups with hooks and everything towards the end of this section.
+
+13
+00:01:13.519 --> 00:01:19.040
+It can be overwhelming to think about, like a lot of a million things a chart can do at this point.
+
+14
+00:01:19.040 --> 00:01:25.760
+So let's start with something simple and learn the important bits and pieces one by one. So let's
+
+15
+00:01:25.760 --> 00:01:31.279
+start by looking at how to create a Helm chart from scratch. Let's use the example of a simple
+
+16
+00:01:31.279 --> 00:01:36.800
+Hello World application. We have a deployment with the nginx image with two replicas. And we have a
+
+17
+00:01:36.800 --> 00:01:42.720
+service to expose this application. Super simple. Let's see how we can create a Helm chart from
+
+18
+00:01:42.720 --> 00:01:50.480
+this. Earlier, we learned that a Helm chart is a directory with a specific structure with the
+
+19
+00:01:50.480 --> 00:01:56.959
+templates directory and the other supporting files like the values.yaml, the Chart.yaml,
+
+20
+00:01:56.959 --> 00:02:05.120
+license, README, etc. So our goal is to create a directory structure first, something like this,
+
+21
+00:02:05.120 --> 00:02:12.320
+but you don't have to do that yourself manually. You could run the helm create command and specify
+
+22
+00:02:12.320 --> 00:02:20.080
+a chart name to create a chart structure. And this creates a skeleton structure of a Helm chart.
+
+23
+00:02:20.080 --> 00:02:26.559
+So now you just have to go in and modify these files, or add the relevant files to the templates
+
+24
+00:02:26.559 --> 00:02:34.399
+or charts directory. Now you'll see the chart.yaml file already has some sample data in it,
+
+25
+00:02:34.399 --> 00:02:38.880
+it has the name already set to nginx-chart, because that's what we gave in the command line,
+
+26
+00:02:38.880 --> 00:02:44.800
+and a sample description and some sample values for versions and app versions. Now let's assume
+
+27
+00:02:44.800 --> 00:02:49.199
+the following scenario, let's assume that we are building this for our company. And we want other
+
+28
+00:02:49.199 --> 00:02:54.960
+employees or other users, users that use it to have some basic information about the chart.
+
+29
+00:02:55.759 --> 00:03:03.279
+So we'll modify the description and add an email at the end under the maintenance section. So people
+
+30
+00:03:03.279 --> 00:03:09.039
+can contact us if they have any questions. And feel free to modify the other details and add
+
+31
+00:03:09.039 --> 00:03:14.479
+other properties to it, such as the home, the URL to the home directory, or a path to the icon,
+
+32
+00:03:14.479 --> 00:03:23.600
+etc., as required. Next is the templates directory; it already has some files that are samples.
+
+33
+00:03:24.479 --> 00:03:30.160
+And these are samples automatically created by Helm create command. For now, we will just get
+
+34
+00:03:30.160 --> 00:03:34.479
+rid of these and just work with the files that we already have for our application,
+
+35
+00:03:34.479 --> 00:03:37.839
+because our requirement is pretty simple and straightforward.
+
+36
+00:03:39.679 --> 00:03:46.639
+Okay, so we now have an empty templates directory. And our first goal is to move the files that we
+
+37
+00:03:46.639 --> 00:03:52.000
+already have for our application, the deployment file and the service YAML file into this directory.
+
+38
+00:03:52.800 --> 00:03:59.759
+And to be honest, this should be it. Once we place the relevant files in the templates directory,
+
+39
+00:03:59.759 --> 00:04:05.600
+our Helm chart technically should be ready to go. Our chart is now ready to be installed using
+
+40
+00:04:05.600 --> 00:04:12.399
+the Helm install command. However, note that these files in the templates folder have all static
+
+41
+00:04:12.399 --> 00:04:18.079
+values in it. For example, if you look at the name of the deployment, or the number of replicas or
+
+42
+00:04:18.799 --> 00:04:24.959
+the name of containers, they're all statically defined to Hello World, for example.
+
+43
+00:04:25.839 --> 00:04:32.559
+Now, what could be the problem with that? Imagine we install the Helm chart with this using the Helm
+
+44
+00:04:32.559 --> 00:04:39.440
+install command, we give the release a name, Hello World one, and point to the nginx chart directory
+
+45
+00:04:39.440 --> 00:04:45.760
+that we just created, it installs the chart and creates a deployment. The deployment is named
+
+46
+00:04:45.760 --> 00:04:53.440
+Hello World. This is because the template file has named Hello World defined in it. Now what happens
+
+47
+00:04:53.920 --> 00:05:00.880
+when you try to install another release of the same chart? It fails with the error message that
+
+48
+00:05:00.880 --> 00:05:07.600
+says a deployment with the name Hello World already exists. And of course, as you can see,
+
+49
+00:05:07.600 --> 00:05:13.920
+this is because the deployment name is static and is defined statically in the deployment.yaml file.
+
+50
+00:05:13.920 --> 00:05:20.000
+And every time that we are installing a new release using the helm install command, it's
+
+51
+00:05:20.000 --> 00:05:26.720
+simply trying to create the same deployment with the same name. So it must have different names
+
+52
+00:05:26.720 --> 00:05:34.720
+each time you install a helm chart. So how do we solve this? We templatize the name of the deployment,
+
+53
+00:05:35.279 --> 00:05:40.640
+we use helm's templating language to basically tell Helm that the name of this deployment
+
+54
+00:05:40.640 --> 00:05:48.640
+should be based on how the user chose to name his or her release. So release.name becomes
+
+55
+00:05:48.640 --> 00:05:56.160
+Hello, world dash one, and the name of the deployment becomes Hello, world one dash nginx.
+
+56
+00:05:57.200 --> 00:06:04.079
+So let's take a closer look at that template. Now we templatize something by adding something
+
+57
+00:06:04.079 --> 00:06:10.320
+between the two curly brackets. This is called the template directory. And it's not
+
+58
+00:06:10.320 --> 00:06:16.559
+something very specific to Helm. It is in fact the Go template language that Go programming languages,
+
+59
+00:06:17.119 --> 00:06:22.239
+template language within the curly brackets is where we specify the path to the objects that
+
+60
+00:06:22.239 --> 00:06:28.799
+we'd like to access. It starts with a dot, the dot refers to the root level or top-level scope.
+
+61
+00:06:28.799 --> 00:06:34.320
+We'll talk more about scopes in the upcoming lectures. The release name in this case is
+
+62
+00:06:34.320 --> 00:06:39.119
+the release name that we have specified in the helm install command. So when we run the helm
+
+63
+00:06:39.119 --> 00:06:45.519
+install command, the template directive is replaced by the release name to form hello-dash
+
+64
+00:06:45.519 --> 00:06:52.959
+world-dash-one-dash-nginx. So that's how templating works. Now similar to release name, there are
+
+65
+00:06:52.959 --> 00:06:58.720
+other objects as well such as release.name, release.namespace, release.isUpgrade,
+
+66
+00:06:58.720 --> 00:07:04.880
+revision, service, etc. Or you can refer to any values from the chart.yaml file that we
+
+67
+00:07:04.880 --> 00:07:10.399
+created, such as chart name itself, or the API version that we've defined in the chart.yaml
+
+68
+00:07:10.399 --> 00:07:18.480
+file, or the version or type keywords, home, etc. Or even details of the Kubernetes cluster itself
+
+69
+00:07:18.480 --> 00:07:24.160
+with the capabilities objects such as the kubeVersion, or the set of versions of resources
+
+70
+00:07:24.160 --> 00:07:30.720
+available on the cluster, or the helm version and such. And anything that starts with the values
+
+71
+00:07:31.200 --> 00:07:37.119
+is something that refers to the properties defined in the values.yaml file. And this
+
+72
+00:07:37.119 --> 00:07:41.440
+could be any number of values defined in the values.yaml file. And currently there are two.
+
+73
+00:07:42.720 --> 00:07:49.119
+Now one other thing to note here is the difference in case convention for the first three objects,
+
+74
+00:07:49.119 --> 00:07:56.559
+release, chart, and capabilities. The second part after the dot all starts with a capital letter,
+
+75
+00:07:56.559 --> 00:08:04.559
+such as name, namespace, upgrade, and others. However, if you look at values, you'll see this
+
+76
+00:08:04.559 --> 00:08:10.959
+starts with a small case. So why is that? These are case sensitive. So it is important to be careful
+
+77
+00:08:10.959 --> 00:08:17.519
+with the case you use. The first three are built-in objects. And as such, they must follow the
+
+78
+00:08:17.519 --> 00:08:23.760
+capital letter naming convention. Everything under values is user-defined. That is whatever
+
+79
+00:08:23.760 --> 00:08:29.519
+the user defines in the values.yaml file. So the users are free to follow whatever naming
+
+80
+00:08:29.519 --> 00:08:35.520
+convention that they'd like to follow in the values.yaml file. In this case, these values
+
+81
+00:08:35.520 --> 00:08:42.559
+follow a small case letter. And so you must use whatever it is that is defined in the values.yaml
+
+82
+00:08:42.559 --> 00:08:48.799
+file. Coming back to our example, if we create a release called Hello World 1 and another called
+
+83
+00:08:48.799 --> 00:08:53.599
+Hello World 2, the first one will name the deployment Hello World 1 nginx while the
+
+84
+00:08:53.599 --> 00:09:00.159
+second one will call it Hello World 2 nginx. And we now have guaranteed unique names. Now remember
+
+85
+00:09:00.159 --> 00:09:04.640
+to do the same for the services or any other objects that you create as part of your Helm
+
+86
+00:09:04.640 --> 00:09:10.000
+chart. We should follow similar techniques for all Kubernetes objects that must have unique values or
+
+87
+00:09:10.000 --> 00:09:15.200
+names. Helm does not allow us to install two releases with the same name. So by basing the
+
+88
+00:09:15.200 --> 00:09:20.000
+names of our Kubernetes objects on the release name, we can be sure that our charts can never
+
+89
+00:09:20.000 --> 00:09:25.840
+create two objects with the same name. Furthermore, when we later explore our objects, seeing something
+
+90
+00:09:25.840 --> 00:09:31.840
+called release 5-PVC or something will quickly help us identify to which release this
+
+91
+00:09:31.840 --> 00:09:40.239
+object belongs. So whatever value you think shouldn't be hard coded should be templatized.
+
+92
+00:09:40.239 --> 00:09:46.320
+In this case, the replicas and image names could be values that we need to allow the user using our
+
+93
+00:09:46.320 --> 00:09:53.280
+charts to customize. So we can templatize them by using the values.yaml replica count and values
+
+94
+00:09:53.280 --> 00:10:01.760
+.yaml image template directive like this. So anything defined as values should either be passed through
+
+95
+00:10:01.760 --> 00:10:08.479
+the values option, or the set option while installing Helm chart, or be defined in the
+
+96
+00:10:08.479 --> 00:10:15.599
+values.yaml file like this. So let's take a closer look at the value defined for image.
+
+97
+00:10:16.479 --> 00:10:23.520
+Since it's text, we could access it within the deployment.yaml file as values.image.
+
+98
+00:10:24.320 --> 00:10:31.919
+Now, image could have an image name and a version number, as well as other properties such as pull
+
+99
+00:10:31.919 --> 00:10:38.960
+policy, etc. So we can either write it as image_repository, image_pull_policy
+
+100
+00:10:38.960 --> 00:10:45.039
+or image_tag. But a better way and the right way to do it is to write it as a dictionary
+
+101
+00:10:45.039 --> 00:10:53.359
+like this. This way, we can refer to the image name as values.image.repository. So values
+
+102
+00:10:53.359 --> 00:11:01.119
+tells the values from the values.yaml file. The image is the image dictionary within the values
+
+103
+00:11:01.119 --> 00:11:09.359
+.yaml file. And repository is the name of the repository within the image dictionary. So that's
+
+104
+00:11:09.359 --> 00:11:16.960
+how the template directive is formed when we work with dictionaries. And if we want to add the tag
+
+105
+00:11:16.960 --> 00:11:26.559
+on then we add the tag using the same format values.image.tag like this. So the image
+
+106
+00:11:26.559 --> 00:11:36.799
+repository part becomes nginx. And the image tag part becomes 1.16.0. And together they form
+
+107
+00:11:36.799 --> 00:11:43.679
+the complete value with a colon in between. Well, that's how you define a dictionary in the values
+
+108
+00:11:43.679 --> 00:11:51.359
+file and use it in a template. So to summarize, when we install a Helm chart, Helm uses the files
+
+109
+00:11:51.359 --> 00:11:58.320
+in the templates directory, and then combines it with the information about the releases such as
+
+110
+00:11:58.320 --> 00:12:04.239
+the release name and any other information, the data stored in the values.yaml file,
+
+111
+00:12:04.880 --> 00:12:12.640
+and the chart details to form the final versions of manifest files, as seen here on the right to
+
+112
+00:12:12.640 --> 00:12:20.080
+deploy resources on Kubernetes. Now apart from these, it also refers to any other object that
+
+113
+00:12:20.080 --> 00:12:24.719
+are available, such as the Kubernetes cluster itself. So there may be some data that is pulled
+
+114
+00:12:24.719 --> 00:12:31.039
+from the Kubernetes cluster itself, and any other objects that are available to be used in a Helm
+
+115
+00:12:31.039 --> 00:12:36.159
+template. Well, that's all for this lecture, and I will see you in the next one.
