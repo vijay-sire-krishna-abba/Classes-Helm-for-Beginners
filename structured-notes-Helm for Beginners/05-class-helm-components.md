@@ -1,12 +1,4 @@
-```
-](../05-class-helm-components/image
-](../05-class-helm-components/image
-```
-Got it ✅ I’ll rewrite this into **structured, detailed notes** with clear headings, bullet points, and explanations while **keeping your images (`![alt text](../05-class-helm-components/image-x.png)`) intact**. You’ll be able to paste this directly into your `.md` file.
 
-Here’s the rewritten content:
-
----
 
 # Helm Components and Structure
 
@@ -268,6 +260,4 @@ helm install my-second-site bitnami/wordpress
 
 This structure makes Helm a **powerful package manager for Kubernetes**, allowing easy deployment, upgrades, rollbacks, and collaboration.
 
----
 
-Do you want me to also **add side-by-side diagrams (ASCII flowcharts)** in some sections (like Charts → Release → Revision) to make these notes even more visual in your `.md` file?

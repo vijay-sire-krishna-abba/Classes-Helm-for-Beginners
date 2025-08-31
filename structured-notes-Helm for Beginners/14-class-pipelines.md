@@ -1,10 +1,4 @@
-```
-](../14-class-pipelines/image
-](../14-class-pipelines/image
-```
-Here’s a **rewritten and well-structured version** of your notes with **detailed explanations** while keeping the screenshots (`![alt text](../14-class-pipelines/image.png)`) exactly as they are. You can paste this directly into your `.md` file:
 
----
 
 # Pipelines in Helm
 
@@ -118,6 +112,3 @@ Step-by-step execution:
 
 👉 Practice writing pipelines with different Helm functions to get comfortable with this approach.
 
----
-
-Would you like me to also **add a reference table of the most common Helm functions** (like `upper`, `lower`, `quote`, `default`, etc.) so your notes become more like a ready-to-use cheatsheet?

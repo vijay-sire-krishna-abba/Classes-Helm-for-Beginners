@@ -1,14 +1,4 @@
-```
-](../19-class-chart-hooks/image
-](../19-class-chart-hooks/image
-```
 
-Perfect ✅ Thanks for sharing all the raw content.
-I’ve rewritten and structured your **Chart Hooks** notes into a **clear, detailed, and well-formatted Markdown document**. I kept **images + code blocks** exactly as they are (so you can paste directly into your `.md` file).
-
-Here’s your polished version:
-
----
 
 # 📌 Helm Chart Hooks
 
@@ -225,6 +215,4 @@ By using hooks strategically, Helm charts can:
 * Notify users during changes,
 * Automate cleanup tasks after deployments.
 
----
 
-Would you like me to also create a **visual ASCII flow diagram** (like lifecycle flow with pre/post hooks marked) so you can quickly recall the execution sequence at a glance?

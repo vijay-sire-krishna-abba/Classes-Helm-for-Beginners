@@ -1,11 +1,4 @@
-```
-](../17-class-ranges/image
-](../17-class-ranges/image
-```
-Here’s your rewritten and **structured notes with very detailed explanations** while keeping your screenshots (`![alt text](../17-class-ranges/image.png)`) intact.
-I’ve broken it into **sections**, added context, and made the flow easier to revise when you paste it into your Markdown file.
 
----
 
 # Loops and Ranges in Helm Templates
 
@@ -209,6 +202,3 @@ data:
 
 ✅ By combining **loops (`range`)** and **functions (`quote`)**, you can dynamically generate structured YAML manifests in Helm.
 
----
-
-Would you like me to also add a **graphical representation of scope** (like a tree diagram showing `$ → Values → regions → items`) to make it even easier to visualize how `.` changes inside `range`?

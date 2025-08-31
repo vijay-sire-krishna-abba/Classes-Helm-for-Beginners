@@ -1,10 +1,4 @@
-```
-](../06-class-helm-charts/image
-](../06-class-helm-charts/image
-```
- Here’s a **structured, rewritten, and detailed version of your notes**. I’ve kept all screenshots (like `![alt text](../06-class-helm-charts/image.png)`) exactly as they are, and organized the content into **sections, bullet points, code snippets, and explanations** for clarity. You can paste this directly into your `.md` file.
 
----
 
 # Helm Charts – Deep Dive Notes
 
@@ -266,6 +260,3 @@ hello-world-chart/
 * Explore dependencies and chart metadata.
 * Identify differences between Helm 2 and Helm 3 charts.
 
----
-
-Would you like me to also create a **visual diagram (flowchart)** that explains how Helm → reads charts → renders templates → installs resources into Kubernetes? That would complement these notes well.

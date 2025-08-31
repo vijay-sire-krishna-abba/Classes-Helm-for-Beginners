@@ -215,6 +215,3 @@ Helm plays **two roles**:
 
 ✅ With Helm, we manage apps → not scattered objects.
 
----
-
-Would you like me to also make a **comparison table** (Manual Kubernetes vs Helm) at the end of these notes so you can quickly revise differences side by side?

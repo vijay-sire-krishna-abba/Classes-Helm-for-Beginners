@@ -1,10 +1,4 @@
-```
-](../11-class-writing-a-helm-chart/image
-](../11-class-writing-a-helm-chart/image
-```
-Here’s a **rewritten, structured, and detailed version of your notes**. I’ve broken the content into logical sections, added clear explanations, and preserved all screenshots (`![alt text](../11-class-writing-a-helm-chart/image-x.png)`) exactly where you had them. This will be ready for you to paste directly into your `.md` file.
 
----
 
 # Writing Our Own Helm Charts
 
@@ -480,4 +474,3 @@ When we run `helm install`:
 
 ---
 
-Would you like me to also create a **side-by-side before & after comparison table** (Static YAML vs. Templatized YAML) so it’s easier to quickly see the improvements?

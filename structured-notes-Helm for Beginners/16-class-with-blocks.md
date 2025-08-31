@@ -1,12 +1,4 @@
-```
-](../16-class-with-blocks/image
-](../16-class-with-blocks/image
-```
-Got it 👍 I’ll rewrite this into **structured, detailed notes** with clear sections, proper explanations, and keep all the screenshots (`![alt text](../16-class-with-blocks/image-x.png)`) exactly as they are. This way you can directly paste it into your `.md` file.
 
-Here’s the improved version:
-
----
 
 # Helm Scopes – Detailed Notes
 
@@ -213,8 +205,3 @@ data:
 * Inside nested `with`, `.` changes to that block’s scope.
 * To escape back to root, use `$`.
 
----
-
-✅ With this structure, you can directly paste into your `.md` file — it’s organized like proper course notes.
-
-Do you want me to also add a **visual tree diagram** (like ASCII or markdown tree) to represent how scopes change at each step? That will make it even easier to see the hierarchy.

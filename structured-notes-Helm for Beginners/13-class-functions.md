@@ -1,10 +1,4 @@
-```
-](../13-class-functions/image
-](../13-class-functions/image
-```
-Got it 👍 I’ll rewrite your draft into **structured, detailed study notes** with clear sections, explanations, and all your `![alt text](...)` screenshots preserved exactly as they are. You can paste this directly into your `.md` file.
 
----
 
 # Helm Template Functions – Detailed Notes
 
@@ -294,4 +288,3 @@ containers:
 
 ---
 
-👉 Would you like me to **also extend this with real-world Helm best practices** (like always wrapping image tags in `default`, using `required` to enforce values, etc.) so your notes not only cover functions but also *how they’re used in production charts*?

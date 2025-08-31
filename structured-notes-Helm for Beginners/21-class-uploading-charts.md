@@ -1,11 +1,4 @@
-```
-](../21-class-uploading-charts/image
-](../21-class-uploading-charts/image
-```
-Got it ✅ I’ll rewrite your given content into **structured, detailed, and well-explained notes** (with your screenshots kept exactly as they are).
-This way you can directly paste it into your Markdown file and it will read like a proper learning document.
 
----
 
 # 📘 Helm Chart Repository – Packaging, Indexing, and Uploading
 
@@ -194,6 +187,3 @@ $ helm install my-new-release our-cool-charts/nginx-chart
 4. **Add Repo in Helm** → `helm repo add`.
 5. **Install Charts Easily** → `helm install release repo/chart`.
 
----
-
-Would you like me to also create a **mermaid flow diagram** here (like earlier), showing the process **from packaging → indexing → uploading → using repo**? That way your notes will be both text + visual.

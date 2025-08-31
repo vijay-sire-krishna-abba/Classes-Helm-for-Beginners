@@ -1,13 +1,4 @@
-```
-](../20-class-packaging-and-signing-charts/image
-](../20-class-packaging-and-signing-charts/image
-```
-Got it 👍
-I’ll rewrite your raw content into **structured, detailed, easy-to-follow notes** while keeping all your screenshots (`![alt text](../20-class-packaging-and-signing-charts/image-x.png)`) and commands intact. This way, you can directly paste into your `.md` file.
 
-Here’s your polished version:
-
----
 
 # 📦 Packaging and Uploading Helm Charts
 
@@ -276,7 +267,3 @@ $ helm install --verify nginx-chart-0.1.0
 
 Next: 📤 Uploading charts to repositories.
 
----
-
-Do you want me to also add a **flow diagram (ASCII or Mermaid)** that shows the steps like:
-`Developer → Package → Sign → Distribute (tgz + prov) → User → Verify → Install` ?

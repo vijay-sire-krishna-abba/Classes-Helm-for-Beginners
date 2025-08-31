@@ -1,12 +1,4 @@
-```
-](../07-class-working-with-helm--basics/image
-](../07-class-working-with-helm--basics/image
-```
-Got it ✅ I’ll rewrite this into **structured, detailed notes** that are easy to paste into your Markdown file. I’ll keep all the screenshots exactly as they are (`![alt text](../07-class-working-with-helm--basics/image-x.png)`), expand explanations for clarity, and organize the content with proper sections, code blocks, and examples.
 
-Here’s the rewritten version:
-
----
 
 # Helm CLI – Structured Notes
 
@@ -289,6 +281,3 @@ This is similar to `apt-get update` in Linux – it **refreshes local cache** of
 
 With Helm, deploying and managing Kubernetes applications becomes **fast, reliable, and simple**.
 
----
-
-👉 Do you want me to also make a **cheatsheet-style table** (command + purpose) at the end of this note for quicker revision?

@@ -1,12 +1,4 @@
-```
-](../15-class-conditionals/image
-](../15-class-conditionals/image
-```
-Got it ✅ I’ll rewrite your content into **structured, detailed notes** with clear explanations, headings, and the images kept in place. I’ll make it **easy to paste into your Markdown file** for study/reference.
 
-Here’s the rewritten structured version:
-
----
 
 # Helm Conditionals – Detailed Notes
 
@@ -290,7 +282,3 @@ metadata:
 
    * Specific lines (like labels)
    * Entire Kubernetes objects (like ServiceAccount)
-
----
-
-Would you like me to also make a **cheat-sheet table** at the end (e.g., `if`, `else`, `eq`, `ne`, `empty`, etc. with examples) so you have a quick reference while practicing?

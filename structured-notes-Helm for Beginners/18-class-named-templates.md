@@ -1,13 +1,4 @@
-```
-](../18-class-named-templates/image
-](../18-class-named-templates/image
-```
-Got it ✅
-I’ll rewrite your content into **well-structured, detailed notes** with proper explanations, indentation, and keep your screenshots (`![alt text](../18-class-named-templates/image-x.png)`) intact so you can directly paste it into your `.md` file.
 
-Here’s the improved version of your notes on **Named Templates in Helm**:
-
----
 
 # 📌 Named Templates in Helm
 
@@ -301,6 +292,3 @@ spec:
 * Always **pass `.`** to maintain scope.
 * Use **`include + indent`** to ensure proper YAML formatting.
 
----
-
-Would you like me to also **add diagrams/ASCII flowcharts** (like scope visualization or flow of `include | indent`) to make it even easier to visualize?

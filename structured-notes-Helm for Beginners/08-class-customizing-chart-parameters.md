@@ -1,12 +1,4 @@
-```
-](../08-class-customizing-chart-parameters/image
-](../08-class-customizing-chart-parameters/image
-```
-Got it ✅ I’ll rewrite your given content into **structured, well-explained notes** with clear sections, step-by-step explanations, and keep your screenshot references (`![alt text](../08-class-customizing-chart-parameters/image-x.png)`) exactly as they are so that when you paste into your `.md` file it remains easy to follow.
 
-Here’s the improved version:
-
----
 
 # Customizing Helm Chart Parameters
 
@@ -165,7 +157,3 @@ Now Helm installs using your **locally modified chart** instead of the remote re
 * **Option 2 (`custom-values.yaml`)** → Best for multiple overrides.
 * **Option 3 (edit local chart)** → Full control over the chart itself.
 
----
-
-Would you like me to also **add diagrams** (like ASCII or Mermaid charts) explaining the flow:
-`helm install → values.yaml → templates → deployment` so the notes become even more visual, like a cheat sheet?

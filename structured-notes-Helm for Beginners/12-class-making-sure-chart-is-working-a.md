@@ -1,10 +1,4 @@
-```
-](../12-class-making-sure-chart-is-working-a/image
-](../12-class-making-sure-chart-is-working-a/image
-```
-Here’s a **rewritten and structured version of your content as detailed study notes**, with clear explanations and the screenshots (`![alt text](...)`) kept exactly as you had them so you can directly paste this into your `.md` file.
 
----
 
 # Verifying Helm Charts Before Installation
 
@@ -341,4 +335,3 @@ By combining these three steps, you ensure that:
 
 ---
 
-Would you like me to also **add diagrams/flowcharts** (like how lint → template → dry-run lead into actual install) so the notes become more **visual and easier to revise**?

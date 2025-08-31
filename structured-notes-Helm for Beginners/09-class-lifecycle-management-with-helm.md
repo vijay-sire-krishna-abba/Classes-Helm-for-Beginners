@@ -1,12 +1,4 @@
-```
-](../09-class-lifecycle-management-with-helm/image
-](../09-class-lifecycle-management-with-helm/image
-```
-Perfect 👌 Thanks for sharing the raw content again. I’ll rewrite and structure it into **clear, detailed, well-explained notes** with proper sections, explanations, and all your image references intact. You’ll be able to paste this directly into a Markdown (`.md`) file.
 
-Here’s the cleaned-up and structured version:
-
----
 
 # Lifecycle Management with Helm
 
@@ -238,8 +230,3 @@ Helm enables easy lifecycle management by:
 * Allowing safe rollbacks.
 * Managing applications as independent releases.
 
----
-
-✅ That’s a fully **structured and deeply explained version** of your content.
-
-Do you want me to also create a **visual workflow diagram** (in Markdown using Mermaid, e.g. `install → upgrade → history → rollback`) so you can quickly recall the lifecycle steps?

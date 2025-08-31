@@ -1,10 +1,4 @@
-```
-](../03-class-installation-and-configuration/image
-](../03-class-installation-and-configuration/image
-```
-Got it 👍 Let’s rewrite and organize this section into **structured study notes** so it’s easier to review. I’ll preserve your screenshot reference and commands while making everything crisp, clear, and logically structured.
 
----
 
 # Installing Helm
 
@@ -67,10 +61,4 @@ pkg install helm
 * PKG → `pkg install helm` (FreeBSD).
 * Documentation → Always check official Helm docs for updates.
 
----
 
-👉 Next step after installation: **practice using Helm commands in your Kubernetes lab environment.**
-
----
-
-Would you like me to also create a **flow diagram / quick reference cheatsheet** for Helm installation methods (Snap vs APT vs PKG vs Others) so you can recall them at a glance?
