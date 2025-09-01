@@ -151,6 +151,7 @@ Since we want our own Deployment and Service, let’s remove them:
 ```bash
 $ ls templates 
 deployment.yaml  _helpers.tpl  hpa.yaml  ingress.yaml  NOTES.txt  serviceaccount.yaml  service.yaml  tests
+
 $ rm -r templates/*
 ```
 
