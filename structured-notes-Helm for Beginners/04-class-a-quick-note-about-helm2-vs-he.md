@@ -97,7 +97,7 @@ helm upgrade wordpress
 helm rollback wordpress
 ```
 
-* Returns to **Revision 1** (new revision also created)
+* Returns to **Revision 1** (new revision 3 also created)
 
 ![alt text](../04-class-a-quick-note-about-helm2-vs-he/image-6.png)
 
