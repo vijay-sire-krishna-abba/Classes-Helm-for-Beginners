@@ -171,6 +171,17 @@ Solution: Use a **dash (`-`)** after the opening curly braces.
 
 Example:
 
+
+<table>
+<tr>
+<th>service.yaml</th>
+<th>service.yaml Generated Output (no extra lines)</th>
+<th>h3</th>
+</tr>
+<tr>
+
+<td>
+
 ```yaml
 apiVersion: v1
 kind: Service
@@ -187,8 +198,9 @@ spec:
   selector:
     app: hello-world
 ```
+</td>
 
-### Generated Output (no extra lines)
+<td>
 
 ```yaml
 apiVersion: v1
@@ -204,6 +216,14 @@ spec:
   selector:
     app: hello-world
 ```
+</td>
+
+<td>
+p3
+</td>
+
+</tr>
+</table>
 
 ![alt text](../15-class-conditionals/image-4.png)
 
