@@ -2,7 +2,7 @@
 
 # Lifecycle Management with Helm
 
-8Lifecycle management might sound like a big technical term, but in plain English, it simply means:
+Lifecycle management might sound like a big technical term, but in plain English, it simply means:
 👉 **Installing, upgrading, downgrading, rolling back, and uninstalling applications over time.**
 
 Helm makes this possible by managing **releases** (deployed instances of charts).
