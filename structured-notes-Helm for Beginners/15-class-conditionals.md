@@ -176,7 +176,6 @@ Example:
 <tr>
 <th>service.yaml</th>
 <th>service.yaml Generated Output (no extra lines)</th>
-<th>h3</th>
 </tr>
 <tr>
 
@@ -216,10 +215,6 @@ spec:
   selector:
     app: hello-world
 ```
-</td>
-
-<td>
-p3
 </td>
 
 </tr>
