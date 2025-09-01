@@ -60,7 +60,9 @@ containers:
 
 Notice how **`WORDPRESS_BLOG_NAME`** pulls its value from `.Values.wordpressBlogName`.
 This means that whatever value is in `values.yaml` (or overridden by us) becomes the blog name.
+
 ![alt text](../08-class-customizing-chart-parameters/image-3.png)
+
 ---
 
 ## Option 1: Override with `--set`
