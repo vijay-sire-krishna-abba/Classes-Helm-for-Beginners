@@ -224,6 +224,9 @@ We use the `default` function:
 
 ### Deployment Template with Default Function
 
+`image: {{ default "nginx" .Values.image.repository }}`
+use quotes around `"nginx"`
+
 **templates/deployment.yaml**
 
 ```yaml
