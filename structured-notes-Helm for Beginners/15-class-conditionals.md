@@ -12,22 +12,23 @@ Conditionals allow us to **include or exclude parts of a template dynamically**,
 We start with two files: `values.yaml` and `service.yaml`.
 
 
-
 <table>
-<tr>    
+<tr>
 <th>values.yaml</th>
 <th>service.yaml</th>
 </tr>
 <tr>
 <td>
+<pre>
+
 ```yaml
 replicaCount: 2
 image: nginx
 orgLabel: payroll
 ```
+
+</pre>
 </td>
-</tr>
-<tr>
 <td>
 
 ```yaml
@@ -47,7 +48,7 @@ spec:
 
 </td>
 </tr>
-
+</table>
 
 
 
