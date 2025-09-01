@@ -89,7 +89,16 @@ end
 
 Helm templates also support **if blocks**, but inside double curly braces.
 
-### values.yaml
+
+<table>
+<tr>
+<th>values.yaml</th>
+<th>service.yaml (with condition)</th>
+<th>Generated Output</th>
+</tr>
+
+<tr>
+<td>
 
 ```yaml
 replicaCount: 2
@@ -97,7 +106,8 @@ image: nginx
 orgLabel: payroll
 ```
 
-### service.yaml (with condition)
+</td>
+<td>
 
 ```yaml
 apiVersion: v1
@@ -116,7 +126,9 @@ spec:
     app: hello-world
 ```
 
-### Generated Output
+</td>
+
+<td>
 
 ```yaml
 apiVersion: v1
@@ -132,6 +144,10 @@ spec:
   selector:
     app: hello-world
 ```
+
+</td>
+</tr>
+</table>
 
 * If `orgLabel` is **not set**, the `labels` section will be skipped entirely.
 * This is very useful for optional configurations.
